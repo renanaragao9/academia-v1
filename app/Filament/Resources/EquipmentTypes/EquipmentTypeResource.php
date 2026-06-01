@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Filament\Resources\EquipmentTypes;
+
+use App\Filament\Resources\EquipmentTypes\Pages\CreateEquipmentType;
+use App\Filament\Resources\EquipmentTypes\Pages\EditEquipmentType;
+use App\Filament\Resources\EquipmentTypes\Pages\ListEquipmentTypes;
+use App\Filament\Resources\EquipmentTypes\Schemas\EquipmentTypeForm;
+use App\Filament\Resources\EquipmentTypes\Tables\EquipmentTypesTable;
+use App\Models\EquipmentType;
+use BackedEnum;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
+
+class EquipmentTypeResource extends Resource
+{
+    protected static ?string $model = EquipmentType::class;
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWrenchScrewdriver;
+
+    protected static ?string $modelLabel = 'Tipo de Equipamento';
+
+    protected static ?string $pluralModelLabel = 'Tipos de Equipamento';
+
+    protected static ?string $navigationLabel = 'Tipos de Equipamento';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Configurações';
+
+    public static function form(Schema $schema): Schema
+    {
+        return EquipmentTypeForm::configure($schema);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return EquipmentTypesTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListEquipmentTypes::route('/'),
+            'create' => CreateEquipmentType::route('/create'),
+            'edit' => EditEquipmentType::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+    {
+        return parent::getRecordRouteBindingEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+}
