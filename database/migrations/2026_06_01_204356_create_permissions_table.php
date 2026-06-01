@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('group');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -11,14 +11,21 @@ class UserInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
+                TextEntry::make('name')
+                    ->label('Nome'),
                 TextEntry::make('email')
-                    ->label('Email address'),
+                    ->label('E-mail'),
                 TextEntry::make('phone')
-                    ->label('Phone')
+                    ->label('Telefone')
                     ->placeholder('-'),
                 TextEntry::make('status')
+                    ->label('Status')
                     ->badge()
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'active' => 'Ativo',
+                        'inactive' => 'Inativo',
+                        default => $state,
+                    })
                     ->color(fn ($state) => match ($state) {
                         'active' => 'success',
                         'inactive' => 'danger',
@@ -26,21 +33,23 @@ class UserInfolist
                     })
                     ->placeholder('-'),
                 TextEntry::make('role.name')
-                    ->label('Role')
+                    ->label('Perfil')
                     ->placeholder('-'),
                 TextEntry::make('email_verified_at')
-                    ->label('Email verified at')
-                    ->dateTime()
+                    ->label('E-mail verificado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('last_login_at')
-                    ->label('Last login')
-                    ->dateTime()
+                    ->label('Último acesso')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

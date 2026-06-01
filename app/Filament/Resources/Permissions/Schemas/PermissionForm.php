@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Permissions\Schemas;
 
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -12,9 +13,12 @@ class PermissionForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Nome')
                     ->required(),
-                TextInput::make('guard_name')
-                    ->required(),
+                Textarea::make('description')
+                    ->label('Descrição')
+                    ->rows(3)
+                    ->nullable(),
             ]);
     }
 }

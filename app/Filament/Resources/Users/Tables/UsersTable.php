@@ -17,17 +17,24 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('E-mail')
                     ->searchable(),
                 TextColumn::make('phone')
-                    ->label('Phone')
+                    ->label('Telefone')
                     ->searchable()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'active' => 'Ativo',
+                        'inactive' => 'Inativo',
+                        default => $state,
+                    })
                     ->color(fn ($state) => match ($state) {
                         'active' => 'success',
                         'inactive' => 'danger',
@@ -35,35 +42,40 @@ class UsersTable
                     })
                     ->placeholder('-'),
                 TextColumn::make('role.name')
-                    ->label('Role')
+                    ->label('Perfil')
                     ->sortable()
                     ->placeholder('-'),
                 TextColumn::make('last_login_at')
-                    ->label('Last login')
-                    ->dateTime()
+                    ->label('Último acesso')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('email_verified_at')
-                    ->dateTime()
+                    ->label('E-mail verificado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('status')
+                    ->label('Status')
                     ->options([
-                        'active' => 'Active',
-                        'inactive' => 'Inactive',
+                        'active' => 'Ativo',
+                        'inactive' => 'Inativo',
                     ]),
                 SelectFilter::make('role')
+                    ->label('Perfil')
                     ->relationship('role', 'name'),
             ])
             ->recordActions([

@@ -15,12 +15,21 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
+
+    protected static ?string $modelLabel = 'Perfil';
+
+    protected static ?string $pluralModelLabel = 'Perfis';
+
+    protected static ?string $navigationLabel = 'Perfis';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Controle de Acesso';
 
     public static function form(Schema $schema): Schema
     {

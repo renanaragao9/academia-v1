@@ -16,15 +16,21 @@ class RolesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
-                TextColumn::make('guard_name')
-                    ->searchable(),
+                TextColumn::make('description')
+                    ->label('Descrição')
+                    ->searchable()
+                    ->placeholder('-')
+                    ->limit(60),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
