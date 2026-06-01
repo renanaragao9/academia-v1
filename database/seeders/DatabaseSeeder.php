@@ -34,6 +34,9 @@ class DatabaseSeeder extends Seeder
 
             // Treino
             ExerciseSeeder::class,
+
+            // Gestão
+            StudentSeeder::class,
         ]);
     }
 }
