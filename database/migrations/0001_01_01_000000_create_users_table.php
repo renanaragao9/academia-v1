@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
