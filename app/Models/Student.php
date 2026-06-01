@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Student extends BaseModel
 {
     protected $fillable = [
@@ -42,4 +44,14 @@ class Student extends BaseModel
         'suspended' => 'Suspenso',
         'pending' => 'Pendente',
     ];
+
+    public function trainingSheets(): HasMany
+    {
+        return $this->hasMany(TrainingSheet::class);
+    }
+
+    public function workoutLogs(): HasMany
+    {
+        return $this->hasMany(WorkoutLog::class);
+    }
 }

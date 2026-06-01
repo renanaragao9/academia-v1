@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class TrainingDivision extends BaseModel
 {
     protected $fillable = [
@@ -13,4 +15,9 @@ class TrainingDivision extends BaseModel
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function sheetDivisions(): HasMany
+    {
+        return $this->hasMany(TrainingSheetDivision::class);
+    }
 }
