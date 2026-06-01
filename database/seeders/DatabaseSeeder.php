@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             PaymentTypeSeeder::class,
             ExpenseTypeSeeder::class,
             ItemTypeSeeder::class,
+
+            // Treino
+            ExerciseSeeder::class,
         ]);
     }
 }
