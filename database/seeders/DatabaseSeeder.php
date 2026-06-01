@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
 
             // Gestão
             StudentSeeder::class,
+
+            // Fichas
+            TrainingSheetSeeder::class,
         ]);
     }
 }
