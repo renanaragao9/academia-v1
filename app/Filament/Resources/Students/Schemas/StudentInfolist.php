@@ -14,6 +14,7 @@ class StudentInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
                 Section::make('Dados Pessoais')
                     ->columns(2)
@@ -57,6 +58,10 @@ class StudentInfolist
                             ->date('d/m/Y')
                             ->placeholder('-'),
 
+                        TextEntry::make('user.name')
+                            ->label('Instrutor / Responsável')
+                            ->placeholder('-'),
+
                         TextEntry::make('last_access_at')
                             ->label('Último Acesso')
                             ->dateTime('d/m/Y H:i')
@@ -64,7 +69,7 @@ class StudentInfolist
                     ]),
 
                 Section::make('Dados Físicos')
-                    ->columns(2)
+                    ->columns(1)
                     ->schema([
                         TextEntry::make('weight')
                             ->label('Peso')

@@ -27,6 +27,13 @@ class StudentsTable
                     ->circular()
                     ->toggleable(),
 
+                TextColumn::make('user.name')
+                    ->label('Instrutor')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('code')
                     ->label('Código')
                     ->searchable()

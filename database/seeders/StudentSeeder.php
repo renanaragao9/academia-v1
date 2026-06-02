@@ -2,13 +2,63 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class StudentSeeder extends Seeder
 {
     public function run(): void
     {
+        // Cria role de Professor se não existir
+        $professorRole = Role::updateOrCreate(
+            ['name' => 'Professor'],
+            ['description' => 'Instrutor responsável por alunos']
+        );
+
+        // Cria professores
+        $professores = [
+            [
+                'name' => 'Prof. Anderson Lima',
+                'email' => 'anderson.lima@academia.com',
+                'password' => bcrypt('12345678'),
+                'phone' => '(11) 99001-1111',
+                'status' => 'active',
+                'role_id' => $professorRole->id,
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Prof. Beatriz Santos',
+                'email' => 'beatriz.santos@academia.com',
+                'password' => bcrypt('12345678'),
+                'phone' => '(11) 99002-2222',
+                'status' => 'active',
+                'role_id' => $professorRole->id,
+                'email_verified_at' => now(),
+            ],
+            [
+                'name' => 'Prof. Marcos Oliveira',
+                'email' => 'marcos.oliveira@academia.com',
+                'password' => bcrypt('12345678'),
+                'phone' => '(11) 99003-3333',
+                'status' => 'active',
+                'role_id' => $professorRole->id,
+                'email_verified_at' => now(),
+            ],
+        ];
+
+        $professorIds = [];
+        foreach ($professores as $data) {
+            $user = User::updateOrCreate(
+                ['email' => $data['email']],
+                $data
+            );
+            $professorIds[] = $user->id;
+        }
+
+        [$prof1, $prof2, $prof3] = $professorIds;
+
         $students = [
             [
                 'name' => 'Carlos Eduardo Silva',
@@ -23,6 +73,7 @@ class StudentSeeder extends Seeder
                 'weight' => 82.50,
                 'height' => 178.00,
                 'is_active' => true,
+                'user_id' => $prof1,
             ],
             [
                 'name' => 'Fernanda Oliveira Costa',
@@ -37,6 +88,7 @@ class StudentSeeder extends Seeder
                 'weight' => 62.00,
                 'height' => 165.00,
                 'is_active' => true,
+                'user_id' => $prof1,
             ],
             [
                 'name' => 'Rafael Mendes Souza',
@@ -51,6 +103,7 @@ class StudentSeeder extends Seeder
                 'weight' => 95.00,
                 'height' => 182.00,
                 'is_active' => true,
+                'user_id' => $prof1,
             ],
             [
                 'name' => 'Juliana Pereira Lima',
@@ -65,6 +118,7 @@ class StudentSeeder extends Seeder
                 'weight' => 58.50,
                 'height' => 162.00,
                 'is_active' => true,
+                'user_id' => $prof1,
             ],
             [
                 'name' => 'Bruno Alves Ferreira',
@@ -79,6 +133,7 @@ class StudentSeeder extends Seeder
                 'weight' => 78.00,
                 'height' => 175.00,
                 'is_active' => false,
+                'user_id' => $prof2,
             ],
             [
                 'name' => 'Mariana Santos Rocha',
@@ -93,6 +148,7 @@ class StudentSeeder extends Seeder
                 'weight' => 55.00,
                 'height' => 160.00,
                 'is_active' => true,
+                'user_id' => $prof2,
             ],
             [
                 'name' => 'Thiago Nascimento Gomes',
@@ -107,6 +163,7 @@ class StudentSeeder extends Seeder
                 'weight' => 88.00,
                 'height' => 180.00,
                 'is_active' => false,
+                'user_id' => $prof2,
             ],
             [
                 'name' => 'Camila Rodrigues Martins',
@@ -121,6 +178,7 @@ class StudentSeeder extends Seeder
                 'weight' => 65.00,
                 'height' => 168.00,
                 'is_active' => true,
+                'user_id' => $prof2,
             ],
             [
                 'name' => 'Lucas Carvalho Dias',
@@ -135,6 +193,7 @@ class StudentSeeder extends Seeder
                 'weight' => 70.00,
                 'height' => 176.00,
                 'is_active' => true,
+                'user_id' => $prof2,
             ],
             [
                 'name' => 'Patrícia Vieira Barbosa',
@@ -149,6 +208,7 @@ class StudentSeeder extends Seeder
                 'weight' => 68.00,
                 'height' => 170.00,
                 'is_active' => true,
+                'user_id' => $prof3,
             ],
             [
                 'name' => 'Diego Monteiro Teixeira',
@@ -163,6 +223,7 @@ class StudentSeeder extends Seeder
                 'weight' => 90.00,
                 'height' => 183.00,
                 'is_active' => true,
+                'user_id' => $prof3,
             ],
             [
                 'name' => 'Amanda Freitas Cunha',
@@ -177,6 +238,7 @@ class StudentSeeder extends Seeder
                 'weight' => 57.00,
                 'height' => 163.00,
                 'is_active' => true,
+                'user_id' => $prof3,
             ],
             [
                 'name' => 'Felipe Araújo Nunes',
@@ -191,6 +253,7 @@ class StudentSeeder extends Seeder
                 'weight' => 102.00,
                 'height' => 185.00,
                 'is_active' => false,
+                'user_id' => $prof3,
             ],
             [
                 'name' => 'Isabela Moreira Pinto',
@@ -205,6 +268,7 @@ class StudentSeeder extends Seeder
                 'weight' => 52.00,
                 'height' => 158.00,
                 'is_active' => true,
+                'user_id' => $prof3,
             ],
             [
                 'name' => 'Rodrigo Castro Lopes',
@@ -219,6 +283,7 @@ class StudentSeeder extends Seeder
                 'weight' => 84.00,
                 'height' => 179.00,
                 'is_active' => true,
+                'user_id' => $prof3,
             ],
         ];
 

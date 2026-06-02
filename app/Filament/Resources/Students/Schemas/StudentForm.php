@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Students\Schemas;
 
 use App\Models\Student;
+use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -69,10 +70,17 @@ class StudentForm
                             ->label('Data de Entrada')
                             ->displayFormat('d/m/Y')
                             ->nullable(),
+
+                        Select::make('user_id')
+                            ->label('Instrutor / Responsável')
+                            ->options(User::orderBy('name')->pluck('name', 'id'))
+                            ->searchable()
+                            ->nullable()
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Dados Físicos')
-                    ->columns(2)
+                    ->columns(1)
                     ->schema([
                         TextInput::make('weight')
                             ->label('Peso (kg)')
@@ -90,7 +98,7 @@ class StudentForm
                     ]),
 
                 Section::make('Status')
-                    ->columns(2)
+                    ->columns(1)
                     ->schema([
                         Select::make('status')
                             ->label('Status')

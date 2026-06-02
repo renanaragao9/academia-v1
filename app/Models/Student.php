@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Student extends BaseModel
 {
     protected $fillable = [
+        'user_id',
         'name',
         'code',
         'email',
@@ -44,6 +45,11 @@ class Student extends BaseModel
         'suspended' => 'Suspenso',
         'pending' => 'Pendente',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function trainingSheets(): HasMany
     {

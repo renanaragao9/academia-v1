@@ -14,9 +14,13 @@ class TrainingSheetInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
                 Section::make('Dados da Ficha')
                     ->columns(2)
+                    ->collapsible()
+                    ->id('dados-da-ficha')
+                    ->extraAttributes(['id' => 'section-dados-da-ficha'])
                     ->schema([
                         TextEntry::make('name')
                             ->label('Ficha'),
@@ -46,6 +50,9 @@ class TrainingSheetInfolist
 
                 Section::make('Divisões e Exercícios')
                     ->description('Visualização completa da ficha com ordem de divisões e exercícios.')
+                    ->collapsible()
+                    ->collapsed()
+                    ->extraAttributes(['id' => 'section-divisoes-exercicios'])
                     ->schema([
                         RepeatableEntry::make('division_snapshot')
                             ->label('Divisões da Ficha')
@@ -62,6 +69,7 @@ class TrainingSheetInfolist
                                                 ->sortBy('order')
                                                 ->values()
                                                 ->map(fn ($exercise): array => [
+                                                    'exercise_order' => $exercise->order,
                                                     'exercise_name' => $exercise->exercise?->name ?? '-',
                                                     'series' => $exercise->series,
                                                     'repetitions' => $exercise->repetitions,
@@ -78,6 +86,7 @@ class TrainingSheetInfolist
                                 TextEntry::make('division_name')
                                     ->label('Divisão')
                                     ->weight('bold')
+                                    ->size('lg')
                                     ->columnSpan(2),
 
                                 TextEntry::make('exercise_total')
@@ -86,28 +95,43 @@ class TrainingSheetInfolist
 
                                 RepeatableEntry::make('exercises')
                                     ->label('Exercícios')
-                                    ->contained(false)
+                                    ->contained(true)
                                     ->columns(6)
+                                    ->extraAttributes(['class' => 'divide-y divide-gray-100 dark:divide-gray-700'])
                                     ->schema([
+                                        TextEntry::make('exercise_order')
+                                            ->label('#')
+                                            ->badge()
+                                            ->color('gray'),
+
                                         TextEntry::make('exercise_name')
                                             ->label('Exercício')
+                                            ->weight('medium')
                                             ->columnSpan(2),
 
                                         TextEntry::make('series')
                                             ->label('Séries')
+                                            ->badge()
+                                            ->color('info')
                                             ->placeholder('-'),
 
                                         TextEntry::make('repetitions')
                                             ->label('Repetições')
+                                            ->badge()
+                                            ->color('info')
                                             ->placeholder('-'),
 
                                         TextEntry::make('rest_seconds')
                                             ->label('Descanso')
+                                            ->badge()
+                                            ->color('warning')
                                             ->formatStateUsing(fn ($state): string => filled($state) ? "{$state}s" : '-')
                                             ->placeholder('-'),
 
                                         TextEntry::make('load')
                                             ->label('Carga')
+                                            ->badge()
+                                            ->color('success')
                                             ->formatStateUsing(fn ($state): string => filled($state) ? number_format((float) $state, 2, ',', '.').' kg' : '-')
                                             ->placeholder('-'),
 
@@ -124,6 +148,9 @@ class TrainingSheetInfolist
 
                 Section::make('Histórico de Treinos')
                     ->description('Treinos executados com os exercícios registrados em cada sessão.')
+                    ->collapsible()
+                    ->collapsed()
+                    ->extraAttributes(['id' => 'section-historico-treinos'])
                     ->schema([
                         RepeatableEntry::make('workout_logs_snapshot')
                             ->label('Sessões Realizadas')
@@ -185,23 +212,31 @@ class TrainingSheetInfolist
 
                                 RepeatableEntry::make('log_exercises')
                                     ->label('Exercícios Executados')
-                                    ->contained(false)
+                                    ->contained(true)
                                     ->columns(6)
+                                    ->extraAttributes(['class' => 'divide-y divide-gray-100 dark:divide-gray-700'])
                                     ->schema([
                                         TextEntry::make('exercise_name')
                                             ->label('Exercício')
+                                            ->weight('medium')
                                             ->columnSpan(2),
 
                                         TextEntry::make('performed_series')
                                             ->label('Séries')
+                                            ->badge()
+                                            ->color('info')
                                             ->placeholder('-'),
 
                                         TextEntry::make('performed_repetitions')
                                             ->label('Repetições')
+                                            ->badge()
+                                            ->color('info')
                                             ->placeholder('-'),
 
                                         TextEntry::make('performed_load')
                                             ->label('Carga')
+                                            ->badge()
+                                            ->color('success')
                                             ->formatStateUsing(fn ($state): string => filled($state) ? number_format((float) $state, 2, ',', '.').' kg' : '-')
                                             ->placeholder('-'),
 
@@ -221,6 +256,9 @@ class TrainingSheetInfolist
 
                 Section::make('Auditoria')
                     ->columns(2)
+                    ->collapsible()
+                    ->collapsed()
+                    ->extraAttributes(['id' => 'section-auditoria'])
                     ->schema([
                         TextEntry::make('creator.name')
                             ->label('Criado por')
