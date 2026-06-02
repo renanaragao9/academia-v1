@@ -65,4 +65,9 @@ class Student extends BaseModel
     {
         return $this->hasMany(Assessment::class);
     }
+
+    public function mealPlans(): HasMany
+    {
+        return $this->hasMany(MealPlan::class);
+    }
 }
