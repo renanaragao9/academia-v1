@@ -60,4 +60,9 @@ class Student extends BaseModel
     {
         return $this->hasMany(WorkoutLog::class);
     }
+
+    public function assessments(): HasMany
+    {
+        return $this->hasMany(Assessment::class);
+    }
 }
