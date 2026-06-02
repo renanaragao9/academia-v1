@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Students\RelationManagers;
 
 use App\Filament\Resources\TrainingSheets\TrainingSheetResource;
-use Filament\Actions\CreateAction;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -46,8 +46,12 @@ class TrainingSheetsRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->label('Adicionar ficha'),
+                Action::make('createTrainingSheet')
+                    ->label('Nova Ficha de Treino')
+                    ->color('primary')
+                    ->url(fn () => TrainingSheetResource::getUrl('create', [
+                        'student_id' => $this->getOwnerRecord()->getKey(),
+                    ])),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -18,4 +18,19 @@ class CreateTrainingSheet extends CreateRecord
 
         return $data;
     }
+
+    protected function fillForm(): void
+    {
+        $this->callHook('beforeFill');
+
+        $data = [];
+
+        if ($studentId = request()->query('student_id')) {
+            $data['student_id'] = $studentId;
+        }
+
+        $this->form->fill($data);
+
+        $this->callHook('afterFill');
+    }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Assessments\Schemas;
 
+use App\Models\Assessment;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class AssessmentForm
 {
@@ -19,12 +22,27 @@ class AssessmentForm
                     ->label('Aluno')
                     ->relationship('student', 'name')
                     ->searchable()
+                    ->preload()
+                    ->live()
                     ->required(),
 
                 Select::make('measurement_type_id')
                     ->label('Tipo de Medição')
-                    ->relationship('measurementType', 'name')
+                    ->relationship(
+                        name: 'measurementType',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn (Builder $query, Get $get) => $query
+                            ->when(
+                                $get('student_id'),
+                                fn (Builder $q, $studentId) => $q->whereNotIn('id',
+                                    Assessment::where('student_id', $studentId)
+                                        ->pluck('measurement_type_id')
+                                )
+                            )
+                            ->orderBy('name'),
+                    )
                     ->searchable()
+                    ->preload()
                     ->required(),
 
                 TextInput::make('value')
@@ -36,14 +54,8 @@ class AssessmentForm
                 DatePicker::make('assessed_at')
                     ->label('Data da Avaliação')
                     ->displayFormat('d/m/Y')
+                    ->default(now())
                     ->required(),
-
-                Select::make('user_id')
-                    ->label('Avaliador')
-                    ->relationship('user', 'name')
-                    ->searchable()
-                    ->nullable()
-                    ->columnSpanFull(),
 
                 Textarea::make('notes')
                     ->label('Observações')
