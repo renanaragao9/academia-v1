@@ -8,6 +8,8 @@ use Spatie\Activitylog\Support\LogOptions;
 
 class MealPlan extends BaseModel
 {
+    protected $table = 'meal_plans';
+
     protected $fillable = [
         'student_id',
         'created_by',

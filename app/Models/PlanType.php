@@ -4,6 +4,8 @@ namespace App\Models;
 
 class PlanType extends BaseModel
 {
+    protected $table = 'plan_types';
+
     protected $fillable = [
         'name',
         'description',

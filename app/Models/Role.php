@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends BaseModel
 {
+    protected $table = 'roles';
+
     protected $fillable = [
         'name',
         'description',

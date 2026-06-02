@@ -4,6 +4,8 @@ namespace App\Models;
 
 class MealType extends BaseModel
 {
+    protected $table = 'meal_types';
+
     protected $fillable = [
         'name',
         'description',

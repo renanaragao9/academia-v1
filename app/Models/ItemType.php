@@ -4,6 +4,8 @@ namespace App\Models;
 
 class ItemType extends BaseModel
 {
+    protected $table = 'item_types';
+
     protected $fillable = [
         'name',
         'description',

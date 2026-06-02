@@ -23,7 +23,9 @@ class CreateMealPlan extends CreateRecord
     {
         $this->callHook('beforeFill');
 
-        $data = [];
+        $data = [
+            'is_active' => true,
+        ];
 
         if ($studentId = request()->query('student_id')) {
             $data['student_id'] = $studentId;

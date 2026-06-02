@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
                 'Controle de Acesso',
                 'Gestão',
                 'Treino',
+                'Nutrição',
                 'Configurações',
             ])
             ->pages([

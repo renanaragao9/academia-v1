@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends BaseModel
 {
+    protected $table = 'students';
+
     protected $fillable = [
         'user_id',
         'name',

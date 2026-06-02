@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Exercise extends BaseModel
 {
+    protected $table = 'exercises';
+
     protected $fillable = [
         'name',
         'description',

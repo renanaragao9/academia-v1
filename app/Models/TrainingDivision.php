@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TrainingDivision extends BaseModel
 {
+    protected $table = 'training_divisions';
+
     protected $fillable = [
         'name',
         'description',

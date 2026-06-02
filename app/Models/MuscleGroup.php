@@ -4,6 +4,8 @@ namespace App\Models;
 
 class MuscleGroup extends BaseModel
 {
+    protected $table = 'muscle_groups';
+
     protected $fillable = [
         'name',
         'description',

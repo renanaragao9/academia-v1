@@ -11,6 +11,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TrainingSheetsRelationManager extends RelationManager
 {
@@ -23,6 +24,7 @@ class TrainingSheetsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true))
             ->columns([
                 TextColumn::make('name')
                     ->label('Ficha')

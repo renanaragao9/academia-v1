@@ -4,6 +4,8 @@ namespace App\Models;
 
 class MeasurementType extends BaseModel
 {
+    protected $table = 'measurement_types';
+
     protected $fillable = [
         'name',
         'description',

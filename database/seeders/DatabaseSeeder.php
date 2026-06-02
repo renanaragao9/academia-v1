@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             // Configurações — nutrição
             FoodTypeSeeder::class,
             MealTypeSeeder::class,
+            FoodSeeder::class,
 
             // Configurações — financeiro
             PlanTypeSeeder::class,

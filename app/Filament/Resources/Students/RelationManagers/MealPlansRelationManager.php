@@ -11,16 +11,20 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class MealPlansRelationManager extends RelationManager
 {
     protected static string $relationship = 'mealPlans';
+
+    protected static ?string $relatedResource = MealPlanResource::class;
 
     protected static ?string $title = 'Planos Alimentares';
 
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('is_active', true))
             ->columns([
                 TextColumn::make('name')
                     ->label('Plano')

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TrainingSheetDivision extends Model
 {
+    protected $table = 'training_sheet_divisions';
+
     protected $fillable = [
         'training_sheet_id',
         'training_division_id',

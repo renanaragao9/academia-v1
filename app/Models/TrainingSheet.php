@@ -8,6 +8,8 @@ use Spatie\Activitylog\Support\LogOptions;
 
 class TrainingSheet extends BaseModel
 {
+    protected $table = 'training_sheets';
+
     protected $fillable = [
         'student_id',
         'created_by',

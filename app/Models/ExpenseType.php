@@ -4,6 +4,8 @@ namespace App\Models;
 
 class ExpenseType extends BaseModel
 {
+    protected $table = 'expense_types';
+
     protected $fillable = [
         'name',
         'description',

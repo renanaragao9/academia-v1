@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MealPlans\Schemas;
 
+use App\Models\FoodType;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -84,9 +85,9 @@ class MealPlanForm
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->required(),
 
-                                Repeater::make('foods')
+                                Repeater::make('mealPlanFoods')
                                     ->label('Alimentos')
-                                    ->relationship()
+                                    ->relationship('foods')
                                     ->orderColumn('order')
                                     ->reorderableWithButtons()
                                     ->collapsible()
@@ -95,13 +96,29 @@ class MealPlanForm
                                     ->addActionLabel('Adicionar alimento')
                                     ->columns(4)
                                     ->schema([
+                                        Select::make('food_type_filter')
+                                            ->label('Tipo de Alimento')
+                                            ->options(
+                                                fn () => FoodType::where('is_active', true)
+                                                    ->orderBy('name')
+                                                    ->pluck('name', 'id')
+                                            )
+                                            ->placeholder('Todos os tipos')
+                                            ->live()
+                                            ->dehydrated(false)
+                                            ->columnSpan(2),
+
                                         Select::make('food_id')
                                             ->label('Alimento')
                                             ->relationship(
                                                 name: 'food',
                                                 titleAttribute: 'name',
-                                                modifyQueryUsing: fn (Builder $query): Builder => $query
+                                                modifyQueryUsing: fn (Builder $query, $get): Builder => $query
                                                     ->where('is_active', true)
+                                                    ->when(
+                                                        $get('food_type_filter'),
+                                                        fn (Builder $q, $typeId) => $q->where('food_type_id', $typeId),
+                                                    )
                                                     ->orderBy('name'),
                                             )
                                             ->searchable()

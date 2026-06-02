@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class WorkoutLogExercise extends Model
 {
     use LogsActivity;
+
+    protected $table = 'workout_log_exercises';
 
     protected $fillable = [
         'workout_log_id',

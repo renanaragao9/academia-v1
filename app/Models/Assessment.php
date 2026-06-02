@@ -9,6 +9,8 @@ class Assessment extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'assessments';
+
     protected $fillable = [
         'student_id',
         'measurement_type_id',
