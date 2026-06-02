@@ -38,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
                 'Gestão',
                 'Treino',
                 'Nutrição',
+                'Financeiro',
                 'Configurações',
             ])
             ->pages([

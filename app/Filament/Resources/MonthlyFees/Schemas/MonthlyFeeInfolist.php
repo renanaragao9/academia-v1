@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Filament\Resources\MonthlyFees\Schemas;
+
+use App\Models\MonthlyFee;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
+class MonthlyFeeInfolist
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->columns(1)
+            ->components([
+                Section::make('Dados da Mensalidade')
+                    ->columns(2)
+                    ->schema([
+                        TextEntry::make('student.name')
+                            ->label('Aluno')
+                            ->columnSpanFull(),
+
+                        TextEntry::make('planType.name')
+                            ->label('Plano'),
+
+                        TextEntry::make('paymentType.name')
+                            ->label('Forma de Pagamento'),
+
+                        TextEntry::make('start_date')
+                            ->label('Início da Vigência')
+                            ->date('d/m/Y'),
+
+                        TextEntry::make('end_date')
+                            ->label('Fim da Vigência')
+                            ->date('d/m/Y'),
+
+                        TextEntry::make('date_payment')
+                            ->label('Data do Pagamento')
+                            ->date('d/m/Y')
+                            ->placeholder('-'),
+
+                        TextEntry::make('full_payment')
+                            ->label('Valor Cheio')
+                            ->money('BRL'),
+
+                        TextEntry::make('discount_payment')
+                            ->label('Desconto')
+                            ->money('BRL'),
+
+                        TextEntry::make('final_payment')
+                            ->label('Valor Final')
+                            ->money('BRL')
+                            ->state(fn (MonthlyFee $record): float => $record->final_payment),
+                    ]),
+
+                Section::make('Responsável')
+                    ->columns(2)
+                    ->collapsible()
+                    ->schema([
+                        TextEntry::make('user.name')
+                            ->label('Professor / Responsável')
+                            ->placeholder('-'),
+
+                        TextEntry::make('uuid')
+                            ->label('UUID')
+                            ->placeholder('-'),
+
+                        TextEntry::make('created_at')
+                            ->label('Criado em')
+                            ->dateTime('d/m/Y H:i'),
+
+                        TextEntry::make('updated_at')
+                            ->label('Atualizado em')
+                            ->dateTime('d/m/Y H:i'),
+                    ]),
+            ]);
+    }
+}
