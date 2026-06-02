@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Students\Schemas;
 use App\Models\Student;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -108,6 +109,61 @@ class StudentInfolist
                         TextEntry::make('updated_at')
                             ->label('Atualizado em')
                             ->dateTime('d/m/Y H:i'),
+                    ]),
+
+                Section::make('Avaliações')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        RepeatableEntry::make('assessments')
+                            ->label('')
+                            ->contained(true)
+                            ->columns(4)
+                            ->schema([
+                                TextEntry::make('measurementType.name')
+                                    ->label('Tipo de Medição'),
+
+                                TextEntry::make('value')
+                                    ->label('Valor')
+                                    ->numeric(),
+
+                                TextEntry::make('assessed_at')
+                                    ->label('Data')
+                                    ->date('d/m/Y'),
+
+                                TextEntry::make('user.name')
+                                    ->label('Avaliador')
+                                    ->placeholder('-'),
+
+                                TextEntry::make('notes')
+                                    ->label('Observações')
+                                    ->placeholder('-')
+                                    ->columnSpanFull(),
+                            ]),
+                    ]),
+
+                Section::make('Fichas de Treino')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        RepeatableEntry::make('trainingSheets')
+                            ->label('')
+                            ->contained(true)
+                            ->columns(3)
+                            ->schema([
+                                TextEntry::make('name')
+                                    ->label('Ficha'),
+
+                                TextEntry::make('start_date')
+                                    ->label('Início')
+                                    ->date('d/m/Y')
+                                    ->placeholder('-'),
+
+                                TextEntry::make('end_date')
+                                    ->label('Fim')
+                                    ->date('d/m/Y')
+                                    ->placeholder('-'),
+                            ]),
                     ]),
             ]);
     }
