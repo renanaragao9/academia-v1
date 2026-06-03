@@ -8,21 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('item_field_type', function (Blueprint $table) {
+        Schema::create('sale_items', function (Blueprint $table) {
             $table->id();
-            $table->text('value');
+            $table->foreignId('sale_id')->constrained('sales')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->foreignId('field_type_id')->constrained('field_types')->cascadeOnDelete();
+            $table->integer('quantity');
+            $table->decimal('unit_price', 10, 2);
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
             $table->softDeletes();
 
+            $table->index('sale_id');
             $table->index('item_id');
-            $table->index('field_type_id');
+            $table->unique(['sale_id', 'item_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('item_field_type');
+        Schema::dropIfExists('sale_items');
     }
 };

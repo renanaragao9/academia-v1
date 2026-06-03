@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ExpenseTypeSeeder::class,
             ItemTypeSeeder::class,
             FieldTypeSeeder::class,
+            ItemSeeder::class,
 
             // Treino
             ExerciseSeeder::class,
