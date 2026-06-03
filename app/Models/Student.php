@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Student extends BaseModel
 {
@@ -76,5 +77,15 @@ class Student extends BaseModel
     public function monthlyFees(): HasMany
     {
         return $this->hasMany(MonthlyFee::class);
+    }
+
+    public function bookingStudents(): HasMany
+    {
+        return $this->hasMany(BookingStudent::class);
+    }
+
+    public function bookings(): HasManyThrough
+    {
+        return $this->hasManyThrough(Booking::class, BookingStudent::class);
     }
 }
