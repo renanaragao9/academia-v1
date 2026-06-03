@@ -49,7 +49,7 @@ class MonthlyFeesTable
                     ->sortable(),
 
                 TextColumn::make('full_payment')
-                    ->label('Valor Cheio')
+                    ->label('Valor do Plano')
                     ->money('BRL')
                     ->sortable(),
 
@@ -58,6 +58,12 @@ class MonthlyFeesTable
                     ->money('BRL')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('amount_paid')
+                    ->label('Valor Pago')
+                    ->money('BRL')
+                    ->placeholder('-')
+                    ->sortable(),
 
                 TextColumn::make('user.name')
                     ->label('Responsável')

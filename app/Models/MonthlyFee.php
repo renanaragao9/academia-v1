@@ -17,6 +17,7 @@ class MonthlyFee extends BaseModel
         'end_date',
         'full_payment',
         'discount_payment',
+        'amount_paid',
         'student_id',
         'payment_type_id',
         'plan_type_id',
@@ -29,6 +30,7 @@ class MonthlyFee extends BaseModel
         'end_date' => 'date',
         'full_payment' => 'decimal:2',
         'discount_payment' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
     ];
 
     protected static function boot(): void

@@ -41,12 +41,17 @@ class MonthlyFeeInfolist
                             ->placeholder('-'),
 
                         TextEntry::make('full_payment')
-                            ->label('Valor Cheio')
+                            ->label('Valor do Plano')
                             ->money('BRL'),
 
                         TextEntry::make('discount_payment')
                             ->label('Desconto')
                             ->money('BRL'),
+
+                        TextEntry::make('amount_paid')
+                            ->label('Valor Pago')
+                            ->money('BRL')
+                            ->placeholder('-'),
 
                         TextEntry::make('final_payment')
                             ->label('Valor Final')
@@ -63,7 +68,7 @@ class MonthlyFeeInfolist
                             ->placeholder('-'),
 
                         TextEntry::make('uuid')
-                            ->label('UUID')
+                            ->label('ID da Transação')
                             ->placeholder('-'),
 
                         TextEntry::make('created_at')

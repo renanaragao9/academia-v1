@@ -22,6 +22,16 @@ class PlanTypesTable
                     ->label('Nome')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('amount_base')
+                    ->label('Valor Base')
+                    ->money('BRL')
+                    ->placeholder('-')
+                    ->sortable(),
+                TextColumn::make('period_days')
+                    ->label('Duração')
+                    ->suffix(' dias')
+                    ->placeholder('-')
+                    ->sortable(),
                 TextColumn::make('description')
                     ->label('Descrição')
                     ->placeholder('-')

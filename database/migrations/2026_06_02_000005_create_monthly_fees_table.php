@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->decimal('full_payment', 8, 2);
             $table->decimal('discount_payment', 8, 2)->default(0);
+            $table->decimal('amount_paid', 8, 2)->nullable();
             $table->foreignId('student_id')->constrained('students')->restrictOnDelete();
             $table->foreignId('payment_type_id')->constrained('payment_types')->restrictOnDelete();
             $table->foreignId('plan_type_id')->constrained('plan_types')->restrictOnDelete();
