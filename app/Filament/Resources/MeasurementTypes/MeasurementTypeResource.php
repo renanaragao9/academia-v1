@@ -23,11 +23,13 @@ class MeasurementTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScale;
 
-    protected static ?string $modelLabel = 'Tipo de Medição';
+    protected static ?string $modelLabel = 'Tipo de Medição Muscular';
 
-    protected static ?string $pluralModelLabel = 'Tipos de Medição';
+    protected static ?string $pluralModelLabel = 'Tipos de Medição Muscular';
 
-    protected static ?string $navigationLabel = 'Tipos de Medição';
+    protected static ?string $navigationLabel = 'Tipos de Medição Muscular';
+
+    protected static ?int $navigationSort = 4;
 
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 

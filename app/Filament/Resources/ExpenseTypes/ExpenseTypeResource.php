@@ -29,6 +29,8 @@ class ExpenseTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Despesa';
 
+    protected static ?int $navigationSort = 12;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema

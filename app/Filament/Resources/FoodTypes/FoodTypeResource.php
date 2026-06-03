@@ -29,6 +29,8 @@ class FoodTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Alimento';
 
+    protected static ?int $navigationSort = 6;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema

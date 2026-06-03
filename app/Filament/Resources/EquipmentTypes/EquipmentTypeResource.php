@@ -29,6 +29,8 @@ class EquipmentTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Equipamento';
 
+    protected static ?int $navigationSort = 3;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema

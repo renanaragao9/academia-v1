@@ -30,6 +30,8 @@ class BookingTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Agendamento';
 
+    protected static ?int $navigationSort = 11;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function canAccess(): bool

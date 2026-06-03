@@ -24,11 +24,13 @@ class FieldTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquare3Stack3d;
 
-    protected static ?string $modelLabel = 'Tipo de Campo';
+    protected static ?string $modelLabel = 'Tipo de Campo do Item';
 
-    protected static ?string $pluralModelLabel = 'Tipos de Campo';
+    protected static ?string $pluralModelLabel = 'Tipos de Campo do Item';
 
-    protected static ?string $navigationLabel = 'Tipos de Campo';
+    protected static ?string $navigationLabel = 'Tipos de Campo do Item';
+
+    protected static ?int $navigationSort = 8;
 
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 

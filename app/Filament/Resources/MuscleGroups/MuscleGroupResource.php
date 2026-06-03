@@ -29,6 +29,8 @@ class MuscleGroupResource extends Resource
 
     protected static ?string $navigationLabel = 'Grupos Musculares';
 
+    protected static ?int $navigationSort = 2;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema

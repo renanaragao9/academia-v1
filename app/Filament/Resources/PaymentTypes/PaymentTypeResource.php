@@ -29,6 +29,8 @@ class PaymentTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Pagamento';
 
+    protected static ?int $navigationSort = 9;
+
     protected static string|UnitEnum|null $navigationGroup = 'Configurações';
 
     public static function form(Schema $schema): Schema
