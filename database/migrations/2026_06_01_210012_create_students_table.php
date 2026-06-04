@@ -27,6 +27,14 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('code');
+            $table->index('email');
+            $table->index('user_id');
+            $table->index('status');
+            $table->index('is_active');
+            $table->index('deleted_at');
+            $table->index(['user_id', 'is_active']);
         });
     }
 

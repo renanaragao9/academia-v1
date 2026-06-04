@@ -18,6 +18,12 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('student_id');
+            $table->index('measurement_type_id');
+            $table->index('user_id');
+            $table->index('deleted_at');
+            $table->index(['student_id', 'created_at']);
         });
     }
 

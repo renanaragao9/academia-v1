@@ -22,9 +22,13 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->index('uuid');
             $table->index('user_id');
             $table->index('student_id');
+            $table->index('status');
             $table->index('date_sale');
+            $table->index('deleted_at');
+            $table->index(['status', 'created_at']);
         });
     }
 

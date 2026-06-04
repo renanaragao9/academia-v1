@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('item_type_id')->constrained('item_types')->restrictOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('item_type_id');
+            $table->index('deleted_at');
         });
     }
 

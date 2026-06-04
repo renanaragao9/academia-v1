@@ -14,6 +14,10 @@ return new class extends Migration
             $table->foreignId('meal_plan_id')->constrained('meal_plans')->cascadeOnDelete();
             $table->foreignId('meal_type_id')->constrained('meal_types')->restrictOnDelete();
             $table->timestamps();
+
+            $table->index('meal_plan_id');
+            $table->index('meal_type_id');
+            $table->index(['meal_plan_id', 'order']);
         });
     }
 

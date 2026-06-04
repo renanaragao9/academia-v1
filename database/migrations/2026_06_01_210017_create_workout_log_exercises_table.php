@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('workout_log_id')->constrained('workout_logs')->cascadeOnDelete();
             $table->foreignId('exercise_id')->constrained('exercises')->restrictOnDelete();
             $table->timestamps();
+
+            $table->index('workout_log_id');
+            $table->index('exercise_id');
         });
     }
 

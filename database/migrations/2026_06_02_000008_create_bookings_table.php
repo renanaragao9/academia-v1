@@ -20,6 +20,14 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('booking_type_id');
+            $table->index('user_id');
+            $table->index('status');
+            $table->index('start_date');
+            $table->index('end_date');
+            $table->index('deleted_at');
+            $table->index(['status', 'start_date']);
         });
     }
 

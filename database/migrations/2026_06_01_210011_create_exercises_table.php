@@ -20,6 +20,11 @@ return new class extends Migration
             $table->foreignId('muscle_group_id')->constrained('muscle_groups')->restrictOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('equipment_type_id');
+            $table->index('muscle_group_id');
+            $table->index('is_active');
+            $table->index('deleted_at');
         });
     }
 

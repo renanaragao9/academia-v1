@@ -18,6 +18,13 @@ return new class extends Migration
             $table->foreignId('training_sheet_division_id')->constrained('training_sheet_divisions')->restrictOnDelete();
             $table->foreignId('validated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
+
+            $table->index('student_id');
+            $table->index('training_sheet_id');
+            $table->index('training_sheet_division_id');
+            $table->index('started_at');
+            $table->index(['student_id', 'started_at']);
+            $table->index(['training_sheet_id', 'started_at']);
         });
     }
 

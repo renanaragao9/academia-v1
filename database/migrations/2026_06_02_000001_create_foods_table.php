@@ -17,6 +17,10 @@ return new class extends Migration
             $table->foreignId('food_type_id')->constrained('food_types')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('food_type_id');
+            $table->index('is_active');
+            $table->index('deleted_at');
         });
     }
 

@@ -19,6 +19,13 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('student_id');
+            $table->index('created_by');
+            $table->index('is_active');
+            $table->index('deleted_at');
+            $table->index(['student_id', 'is_active']);
+            $table->index(['student_id', 'start_date']);
         });
     }
 

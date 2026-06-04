@@ -14,6 +14,10 @@ return new class extends Migration
             $table->foreignId('training_sheet_id')->constrained('training_sheets')->cascadeOnDelete();
             $table->foreignId('training_division_id')->constrained('training_divisions')->restrictOnDelete();
             $table->timestamps();
+
+            $table->index('training_sheet_id');
+            $table->index('training_division_id');
+            $table->index(['training_sheet_id', 'order']);
         });
     }
 

@@ -20,6 +20,10 @@ return new class extends Migration
             $table->foreignId('training_sheet_division_id')->constrained('training_sheet_divisions')->restrictOnDelete();
             $table->foreignId('exercise_id')->constrained('exercises')->restrictOnDelete();
             $table->timestamps();
+
+            $table->index('training_sheet_division_id');
+            $table->index('exercise_id');
+            $table->index(['training_sheet_division_id', 'order']);
         });
     }
 
