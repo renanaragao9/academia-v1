@@ -60,6 +60,22 @@ class SaleInfolist
                             ->color('success'),
                     ]),
 
+                // Auditoria abaixo de Informações da Venda e Resumo Financeiro
+                Section::make('Auditoria')
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        TextEntry::make('created_at')
+                            ->label('Criado em')
+                            ->dateTime('d/m/Y H:i'),
+
+                        TextEntry::make('updated_at')
+                            ->label('Atualizado em')
+                            ->dateTime('d/m/Y H:i'),
+                    ]),
+
                 // Linha completa — itens
                 Section::make('Itens da Venda')
                     ->columnSpanFull()
@@ -85,21 +101,6 @@ class SaleInfolist
                                     ->weight('bold'),
                             ])
                             ->columnSpanFull(),
-                    ]),
-
-                // Auditoria colapsada
-                Section::make('Auditoria')
-                    ->columnSpanFull()
-                    ->columns(2)
-                    ->collapsed()
-                    ->schema([
-                        TextEntry::make('created_at')
-                            ->label('Criado em')
-                            ->dateTime('d/m/Y H:i'),
-
-                        TextEntry::make('updated_at')
-                            ->label('Atualizado em')
-                            ->dateTime('d/m/Y H:i'),
                     ]),
             ]);
     }

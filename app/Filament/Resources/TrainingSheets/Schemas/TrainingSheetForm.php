@@ -81,7 +81,6 @@ class TrainingSheetForm
                                     )
                                     ->searchable()
                                     ->preload()
-                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->required(),
 
                                 Repeater::make('exercises')

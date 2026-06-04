@@ -82,7 +82,7 @@ class StudentInfolist
                             ->placeholder('-'),
                     ]),
 
-                Section::make('Status')
+                Section::make('Status e Auditoria')
                     ->columns(2)
                     ->schema([
                         TextEntry::make('status')

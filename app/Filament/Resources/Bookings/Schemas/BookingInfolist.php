@@ -14,7 +14,7 @@ class BookingInfolist
         return $schema
             ->columns(1)
             ->components([
-                Section::make('Dados do Agendamento')
+                Section::make('Dados do Evento')
                     ->columns(2)
                     ->collapsible()
                     ->schema([
@@ -36,8 +36,16 @@ class BookingInfolist
                                 default => $state,
                             }),
 
+                        TextEntry::make('bookingType.name')
+                            ->label('Tipo de Evento')
+                            ->placeholder('-'),
+
                         TextEntry::make('vacancies')
                             ->label('Vagas'),
+
+                        TextEntry::make('user.name')
+                            ->label('Registrado por')
+                            ->placeholder('-'),
 
                         TextEntry::make('full_addresses')
                             ->label('Endereço Completo')
@@ -50,10 +58,6 @@ class BookingInfolist
                         TextEntry::make('end_date')
                             ->label('Data e Hora de Fim')
                             ->dateTime('d/m/Y H:i'),
-
-                        TextEntry::make('user.name')
-                            ->label('Registrado por')
-                            ->placeholder('-'),
 
                         TextEntry::make('description')
                             ->label('Descrição')

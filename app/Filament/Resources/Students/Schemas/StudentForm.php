@@ -35,21 +35,21 @@ class StudentForm
                             ->required()
                             ->maxLength(255),
 
-                        TextInput::make('code')
-                            ->label('Código')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(50),
-
                         TextInput::make('email')
                             ->label('E-mail')
                             ->email()
                             ->unique(ignoreRecord: true)
                             ->nullable(),
 
+                        TextInput::make('code')
+                            ->label('Código')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(50),
+
                         TextInput::make('phone')
                             ->label('Telefone')
-                            ->tel()
+                            ->mask('(99) 9-9999-9999')
                             ->nullable(),
 
                         Select::make('gender')
@@ -69,6 +69,7 @@ class StudentForm
                         DatePicker::make('entry_date')
                             ->label('Data de Entrada')
                             ->displayFormat('d/m/Y')
+                            ->default(now())
                             ->nullable(),
 
                         Select::make('user_id')

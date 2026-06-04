@@ -27,11 +27,11 @@ class BookingResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static ?string $modelLabel = 'Agendamento';
+    protected static ?string $modelLabel = 'Evento';
 
-    protected static ?string $pluralModelLabel = 'Agendamentos';
+    protected static ?string $pluralModelLabel = 'Eventos';
 
-    protected static ?string $navigationLabel = 'Agendamentos';
+    protected static ?string $navigationLabel = 'Eventos';
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestão';
 

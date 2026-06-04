@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamp('start_date');
             $table->timestamp('end_date');
             $table->integer('vacancies')->default(0);
+            $table->foreignId('booking_type_id')->constrained('booking_types')->restrictOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
             $table->timestamps();
             $table->softDeletes();

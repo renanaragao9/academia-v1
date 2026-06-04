@@ -18,6 +18,7 @@ class Booking extends BaseModel
         'start_date',
         'end_date',
         'vacancies',
+        'booking_type_id',
         'user_id',
     ];
 
@@ -42,6 +43,11 @@ class Booking extends BaseModel
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function bookingType(): BelongsTo
+    {
+        return $this->belongsTo(BookingType::class);
     }
 
     public function bookingStudents(): HasMany

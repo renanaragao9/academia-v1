@@ -46,6 +46,28 @@ class MealPlanInfolist
                             ->state(fn (MealPlan $record): int => $record->meals()->count()),
                     ]),
 
+                Section::make('Auditoria')
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        TextEntry::make('creator.name')
+                            ->label('Criado por')
+                            ->placeholder('-'),
+
+                        TextEntry::make('updater.name')
+                            ->label('Atualizado por')
+                            ->placeholder('-'),
+
+                        TextEntry::make('created_at')
+                            ->label('Criado em')
+                            ->dateTime('d/m/Y H:i'),
+
+                        TextEntry::make('updated_at')
+                            ->label('Atualizado em')
+                            ->dateTime('d/m/Y H:i'),
+                    ]),
+
                 Section::make('Refeições e Alimentos')
                     ->description('Visualização completa do plano com as refeições e alimentos.')
                     ->collapsible()
@@ -109,28 +131,6 @@ class MealPlanInfolist
                                     ->columnSpanFull(),
                             ])
                             ->columnSpanFull(),
-                    ]),
-
-                Section::make('Auditoria')
-                    ->columns(2)
-                    ->collapsible()
-                    ->collapsed()
-                    ->schema([
-                        TextEntry::make('creator.name')
-                            ->label('Criado por')
-                            ->placeholder('-'),
-
-                        TextEntry::make('updater.name')
-                            ->label('Atualizado por')
-                            ->placeholder('-'),
-
-                        TextEntry::make('created_at')
-                            ->label('Criado em')
-                            ->dateTime('d/m/Y H:i'),
-
-                        TextEntry::make('updated_at')
-                            ->label('Atualizado em')
-                            ->dateTime('d/m/Y H:i'),
                     ]),
             ]);
     }

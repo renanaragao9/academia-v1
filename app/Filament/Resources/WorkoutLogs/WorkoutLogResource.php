@@ -24,11 +24,11 @@ class WorkoutLogResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
-    protected static ?string $modelLabel = 'Log de Treino';
+    protected static ?string $modelLabel = 'Registro de Treino';
 
-    protected static ?string $pluralModelLabel = 'Logs de Treino';
+    protected static ?string $pluralModelLabel = 'Registros de Treino';
 
-    protected static ?string $navigationLabel = 'Logs de Treino';
+    protected static ?string $navigationLabel = 'Registros de Treino';
 
     protected static string|UnitEnum|null $navigationGroup = 'Treino';
 

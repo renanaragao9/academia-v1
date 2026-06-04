@@ -36,6 +36,7 @@ class AssessmentForm
                                 $get('student_id'),
                                 fn (Builder $q, $studentId) => $q->whereNotIn('id',
                                     Assessment::where('student_id', $studentId)
+                                        ->where('measurement_type_id', '!=', $get('measurement_type_id'))
                                         ->pluck('measurement_type_id')
                                 )
                             )

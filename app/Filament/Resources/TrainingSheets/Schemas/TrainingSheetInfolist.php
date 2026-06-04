@@ -48,6 +48,38 @@ class TrainingSheetInfolist
                             ->state(fn (TrainingSheet $record): int => (int) $record->divisions()->count()),
                     ]),
 
+                Section::make('Auditoria')
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed()
+                    ->extraAttributes(['id' => 'section-auditoria'])
+                    ->schema([
+                        TextEntry::make('creator.name')
+                            ->label('Criado por')
+                            ->placeholder('-'),
+
+                        TextEntry::make('updater.name')
+                            ->label('Atualizado por')
+                            ->placeholder('-'),
+
+                        TextEntry::make('created_at')
+                            ->label('Criado em')
+                            ->dateTime('d/m/Y H:i')
+                            ->placeholder('-'),
+
+                        TextEntry::make('updated_at')
+                            ->label('Atualizado em')
+                            ->dateTime('d/m/Y H:i')
+                            ->placeholder('-'),
+
+                        TextEntry::make('deleted_at')
+                            ->label('Excluído em')
+                            ->dateTime('d/m/Y H:i')
+                            ->placeholder('-')
+                            ->visible(fn (TrainingSheet $record): bool => $record->trashed())
+                            ->columnSpanFull(),
+                    ]),
+
                 Section::make('Divisões e Exercícios')
                     ->description('Visualização completa da ficha com ordem de divisões e exercícios.')
                     ->collapsible()
@@ -252,38 +284,6 @@ class TrainingSheetInfolist
                                     ->columnSpanFull(),
                             ])
                             ->columns(3),
-                    ]),
-
-                Section::make('Auditoria')
-                    ->columns(2)
-                    ->collapsible()
-                    ->collapsed()
-                    ->extraAttributes(['id' => 'section-auditoria'])
-                    ->schema([
-                        TextEntry::make('creator.name')
-                            ->label('Criado por')
-                            ->placeholder('-'),
-
-                        TextEntry::make('updater.name')
-                            ->label('Atualizado por')
-                            ->placeholder('-'),
-
-                        TextEntry::make('created_at')
-                            ->label('Criado em')
-                            ->dateTime('d/m/Y H:i')
-                            ->placeholder('-'),
-
-                        TextEntry::make('updated_at')
-                            ->label('Atualizado em')
-                            ->dateTime('d/m/Y H:i')
-                            ->placeholder('-'),
-
-                        TextEntry::make('deleted_at')
-                            ->label('Excluído em')
-                            ->dateTime('d/m/Y H:i')
-                            ->placeholder('-')
-                            ->visible(fn (TrainingSheet $record): bool => $record->trashed())
-                            ->columnSpanFull(),
                     ]),
             ]);
     }

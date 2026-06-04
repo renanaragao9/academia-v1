@@ -13,6 +13,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -36,13 +37,10 @@ class AssessmentsRelationManager extends RelationManager
                     ->relationship(
                         name: 'measurementType',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query) => $query
+                        modifyQueryUsing: fn (Builder $query, Get $get) => $query
                             ->whereNotIn('id',
                                 Assessment::where('student_id', $studentId)
-                                    ->when(
-                                        $this->getRecord()?->getKey(),
-                                        fn ($q, $id) => $q->where('id', '!=', $id)
-                                    )
+                                    ->where('measurement_type_id', '!=', $get('measurement_type_id'))
                                     ->pluck('measurement_type_id')
                             )
                             ->orderBy('name'),

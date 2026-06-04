@@ -26,6 +26,13 @@ class BookingForm
                     ->default('pending')
                     ->required(),
 
+                Select::make('booking_type_id')
+                    ->label('Tipo de Evento')
+                    ->relationship('bookingType', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
                 TextInput::make('vacancies')
                     ->label('Vagas')
                     ->numeric()
@@ -35,8 +42,7 @@ class BookingForm
 
                 TextInput::make('full_addresses')
                     ->label('Endereço Completo')
-                    ->required()
-                    ->columnSpanFull(),
+                    ->required(),
 
                 DateTimePicker::make('start_date')
                     ->label('Data e Hora de Início')

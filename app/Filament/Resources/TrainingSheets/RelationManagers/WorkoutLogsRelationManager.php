@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TrainingSheets\RelationManagers;
 
+use App\Filament\Resources\WorkoutLogs\WorkoutLogResource;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -19,7 +20,7 @@ class WorkoutLogsRelationManager extends RelationManager
 {
     protected static string $relationship = 'workoutLogs';
 
-    protected static ?string $title = 'Logs de Treino';
+    protected static ?string $title = 'Registros de Treino';
 
     public function form(Schema $schema): Schema
     {
@@ -95,7 +96,7 @@ class WorkoutLogsRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('Adicionar log')
+                    ->label('Adicionar Registro de Treino')
                     ->mutateDataUsing(function (array $data): array {
                         $data['student_id'] = $this->getOwnerRecord()->student_id;
 
@@ -103,7 +104,8 @@ class WorkoutLogsRelationManager extends RelationManager
                     }),
             ])
             ->recordActions([
-                ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn ($record) => WorkoutLogResource::getUrl('view', ['record' => $record])),
                 EditAction::make(),
                 DeleteAction::make(),
             ]);

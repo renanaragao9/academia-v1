@@ -24,11 +24,11 @@ class BookingTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static ?string $modelLabel = 'Tipo de Agendamento';
+    protected static ?string $modelLabel = 'Tipo de Evento';
 
-    protected static ?string $pluralModelLabel = 'Tipos de Agendamento';
+    protected static ?string $pluralModelLabel = 'Tipos de Evento';
 
-    protected static ?string $navigationLabel = 'Tipos de Agendamento';
+    protected static ?string $navigationLabel = 'Tipos de Evento';
 
     protected static ?int $navigationSort = 11;
 

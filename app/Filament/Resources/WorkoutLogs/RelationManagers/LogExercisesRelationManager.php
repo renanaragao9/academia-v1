@@ -27,7 +27,8 @@ class LogExercisesRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                TextInput::make('performed_repetitions'),
+                TextInput::make('performed_repetitions')
+                    ->label('Repetições executadas'),
                 Textarea::make('observation')
                     ->label('Observações')
                     ->columnSpanFull(),

@@ -38,6 +38,11 @@ class BookingsTable
                     })
                     ->sortable(),
 
+                TextColumn::make('bookingType.name')
+                    ->label('Tipo de Evento')
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('full_addresses')
                     ->label('Endereço')
                     ->searchable()

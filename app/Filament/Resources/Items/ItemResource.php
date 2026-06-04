@@ -29,9 +29,9 @@ class ItemResource extends Resource
 
     protected static ?string $modelLabel = 'Item';
 
-    protected static ?string $pluralModelLabel = 'Items';
+    protected static ?string $pluralModelLabel = 'Itens';
 
-    protected static ?string $navigationLabel = 'Items';
+    protected static ?string $navigationLabel = 'Itens';
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestão';
 
