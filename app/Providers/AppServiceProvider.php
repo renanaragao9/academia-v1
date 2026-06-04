@@ -24,7 +24,9 @@ use App\Models\MeasurementType;
 use App\Models\MonthlyFee;
 use App\Models\MuscleGroup;
 use App\Models\PaymentType;
+use App\Models\Permission;
 use App\Models\PlanType;
+use App\Models\Role;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use App\Models\Student;
@@ -56,7 +58,9 @@ use App\Policies\MeasurementTypePolicy;
 use App\Policies\MonthlyFeePolicy;
 use App\Policies\MuscleGroupPolicy;
 use App\Policies\PaymentTypePolicy;
+use App\Policies\PermissionPolicy;
 use App\Policies\PlanTypePolicy;
+use App\Policies\RolePolicy;
 use App\Policies\SaleItemPolicy;
 use App\Policies\SalePolicy;
 use App\Policies\StudentPolicy;
@@ -98,7 +102,9 @@ class AppServiceProvider extends AuthServiceProvider
         MonthlyFee::class => MonthlyFeePolicy::class,
         MuscleGroup::class => MuscleGroupPolicy::class,
         PaymentType::class => PaymentTypePolicy::class,
+        Permission::class => PermissionPolicy::class,
         PlanType::class => PlanTypePolicy::class,
+        Role::class => RolePolicy::class,
         Sale::class => SalePolicy::class,
         SaleItem::class => SaleItemPolicy::class,
         Student::class => StudentPolicy::class,

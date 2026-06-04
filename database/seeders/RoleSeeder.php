@@ -15,8 +15,8 @@ class RoleSeeder extends Seeder
             ['description' => 'Acesso total ao sistema']
         );
 
-        // Associa todas as permissions de user ao role Admin
-        $userPermissions = Permission::where('group', 'user')->pluck('id');
-        $admin->permissions()->sync($userPermissions);
+        $allPermissions = Permission::pluck('id');
+
+        $admin->permissions()->sync($allPermissions);
     }
 }
