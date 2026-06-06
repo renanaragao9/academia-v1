@@ -51,7 +51,9 @@ class MonthlyFeeInfolist
                         TextEntry::make('amount_paid')
                             ->label('Valor Pago')
                             ->money('BRL')
-                            ->placeholder('-'),
+                            ->placeholder('-')
+                            ->weight('bold')
+                            ->color('success'),
 
                         TextEntry::make('final_payment')
                             ->label('Valor Final')

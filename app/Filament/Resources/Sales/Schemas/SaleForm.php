@@ -70,7 +70,7 @@ class SaleForm
                             }),
 
                         TextInput::make('amount_price')
-                            ->label('Subtotal dos Itens')
+                            ->label('Subtotal dos Produtos')
                             ->numeric()
                             ->prefix('R$')
                             ->disabled()
@@ -87,17 +87,17 @@ class SaleForm
                     ]),
 
                 // Linha completa abaixo — itens da venda
-                Section::make('Itens da Venda')
+                Section::make('Produtos da Venda')
                     ->columnSpanFull()
-                    ->description('Adicione os itens que fazem parte desta venda.')
+                    ->description('Adicione os produtos que fazem parte desta venda.')
                     ->schema([
                         Repeater::make('saleItems')
-                            ->label('Itens')
+                            ->label('Produtos')
                             ->relationship()
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => Item::find($state['item_id'])?->name ?? 'Item')
+                            ->itemLabel(fn (array $state): ?string => Item::find($state['item_id'])?->name ?? 'Produto')
                             ->defaultItems(1)
-                            ->addActionLabel('Adicionar Item')
+                            ->addActionLabel('Adicionar Produto')
                             ->columns(4)
                             ->live()
                             ->afterStateUpdated(function (Get $get, Set $set): void {
@@ -105,7 +105,7 @@ class SaleForm
                             })
                             ->schema([
                                 Select::make('item_id')
-                                    ->label('Item')
+                                    ->label('Produto')
                                     ->options(fn () => Item::orderBy('name')->pluck('name', 'id'))
                                     ->searchable()
                                     ->required()

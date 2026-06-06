@@ -51,7 +51,7 @@ class SalesTable
                     ->sortable(),
 
                 TextColumn::make('saleItems_count')
-                    ->label('Itens')
+                    ->label('Produtos')
                     ->counts('saleItems')
                     ->badge()
                     ->sortable(),

@@ -23,11 +23,11 @@ class ItemTypeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static ?string $modelLabel = 'Tipo de Item';
+    protected static ?string $modelLabel = 'Tipo de Produto';
 
-    protected static ?string $pluralModelLabel = 'Tipos de Item';
+    protected static ?string $pluralModelLabel = 'Tipos de Produtos';
 
-    protected static ?string $navigationLabel = 'Tipos de Item';
+    protected static ?string $navigationLabel = 'Tipos de Produtos';
 
     protected static ?int $navigationSort = 7;
 

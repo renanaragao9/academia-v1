@@ -27,13 +27,13 @@ class AssessmentResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'value';
 
-    protected static ?string $modelLabel = 'Avaliação';
+    protected static ?string $modelLabel = 'Avaliação Física';
 
-    protected static ?string $pluralModelLabel = 'Avaliações';
+    protected static ?string $pluralModelLabel = 'Avaliações Físicas';
 
-    protected static ?string $navigationLabel = 'Avaliações';
+    protected static ?string $navigationLabel = 'Avaliações Físicas';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Gestão';
+    protected static string|UnitEnum|null $navigationGroup = 'Nutrição';
 
     public static function form(Schema $schema): Schema
     {

@@ -13,9 +13,9 @@ class UserSeeder extends Seeder
         $adminRole = Role::where('name', 'Admin')->first();
 
         User::updateOrCreate(
-            ['email' => 'renanaragao159@gmail.com'],
+            ['email' => 'academiaseuracha@seuracha.com'],
             [
-                'name' => 'Renan Aragao',
+                'name' => 'Administrador',
                 'password' => bcrypt('12345678'),
                 'phone' => null,
                 'status' => 'active',

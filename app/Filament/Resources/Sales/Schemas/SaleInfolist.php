@@ -20,7 +20,7 @@ class SaleInfolist
                     ->columns(2)
                     ->schema([
                         TextEntry::make('uuid')
-                            ->label('UUID')
+                            ->label('ID da Transação')
                             ->copyable(),
 
                         TextEntry::make('date_sale')
@@ -46,7 +46,7 @@ class SaleInfolist
                     ->columnSpan(1)
                     ->schema([
                         TextEntry::make('amount_price')
-                            ->label('Subtotal dos Itens')
+                            ->label('Subtotal dos Produtos')
                             ->money('BRL'),
 
                         TextEntry::make('discount_amount')
@@ -77,15 +77,15 @@ class SaleInfolist
                     ]),
 
                 // Linha completa — itens
-                Section::make('Itens da Venda')
+                Section::make('Produtos da Venda')
                     ->columnSpanFull()
                     ->schema([
                         RepeatableEntry::make('saleItems')
-                            ->label('Itens')
+                            ->label('Produtos')
                             ->columns(4)
                             ->schema([
                                 TextEntry::make('item.name')
-                                    ->label('Item')
+                                    ->label('Produto')
                                     ->columnSpan(2),
 
                                 TextEntry::make('quantity')

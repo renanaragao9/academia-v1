@@ -27,11 +27,11 @@ class ItemResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
 
-    protected static ?string $modelLabel = 'Item';
+    protected static ?string $modelLabel = 'Produto';
 
-    protected static ?string $pluralModelLabel = 'Itens';
+    protected static ?string $pluralModelLabel = 'Produtos';
 
-    protected static ?string $navigationLabel = 'Itens';
+    protected static ?string $navigationLabel = 'Produtos';
 
     protected static string|UnitEnum|null $navigationGroup = 'Gestão';
 
