@@ -10,7 +10,6 @@ class Student extends BaseModel
     protected $table = 'students';
 
     protected $fillable = [
-        'user_id',
         'name',
         'code',
         'email',
@@ -25,15 +24,16 @@ class Student extends BaseModel
         'weight',
         'height',
         'is_active',
+        'user_id',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'birth_date' => 'date',
         'entry_date' => 'date',
         'last_access_at' => 'datetime',
         'weight' => 'decimal:2',
         'height' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 
     public const GENDERS = [
