@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\TrainingSheet;
+namespace App\Services\MonthlyFee;
 
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
-class IndexTrainingSheetService
+class IndexMonthlyFeeService
 {
     public function run(array $data): ?Collection
     {
@@ -25,12 +25,8 @@ class IndexTrainingSheetService
             return null;
         }
 
-        return $student->trainingSheets()
-            ->with([
-                'divisions.trainingDivision',
-                'divisions.exercises.exercise',
-            ])
-            ->where('is_active', true)
+        return $student->monthlyFees()
+            ->with(['planType', 'paymentType'])
             ->orderByDesc('start_date')
             ->get();
     }

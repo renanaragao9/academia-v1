@@ -209,6 +209,14 @@ const getGreeting = () => {
   if (hour < 18) return "Boa tarde";
   return "Boa noite";
 };
+
+const logout = () => {
+  if (import.meta.client) {
+    localStorage.removeItem("student");
+  }
+
+  navigateTo("/login");
+};
 </script>
 
 <template>
@@ -220,24 +228,26 @@ const getGreeting = () => {
       />
     </div>
 
-    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <div
+      v-else
+      class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8"
+    >
       <section class="relative">
-        <div class="flex items-center justify-between mb-6">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5 sm:mb-6"
+        >
           <div>
-            <h1 class="text-3xl font-bold text-white">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white">
               {{ getGreeting() }}, {{ studentData?.name?.split(" ")[0] }}!
             </h1>
-            <p class="text-zinc-400 mt-1">Bem-vindo ao seu painel pessoal</p>
+            <p class="text-sm sm:text-base text-zinc-400 mt-1">
+              Bem-vindo ao seu painel pessoal
+            </p>
           </div>
 
           <button
-            class="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
-            @click="
-              () => {
-                localStorage.removeItem('student');
-                navigateTo('/login');
-              }
-            "
+            class="self-start sm:self-auto flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+            @click="logout"
           >
             <Icon name="lucide:log-out" class="h-4 w-4" />
             <span class="hidden sm:inline">Sair</span>
@@ -245,7 +255,7 @@ const getGreeting = () => {
         </div>
 
         <div
-          class="relative h-64 md:h-96 rounded-2xl overflow-hidden bg-zinc-800/50"
+          class="relative h-52 sm:h-64 md:h-96 rounded-2xl overflow-hidden bg-zinc-800/50"
         >
           <TransitionGroup name="carousel" tag="div" class="relative h-full">
             <div
@@ -255,16 +265,18 @@ const getGreeting = () => {
               class="absolute inset-0"
             >
               <div
-                class="w-full h-full bg-gradient-to-br flex items-end p-8"
+                class="w-full h-full bg-gradient-to-br flex items-end p-4 sm:p-8"
                 :class="slide.gradient"
               >
                 <div
-                  class="w-full bg-black/30 backdrop-blur-sm rounded-2xl p-6"
+                  class="w-full bg-black/30 backdrop-blur-sm rounded-2xl p-4 sm:p-6"
                 >
-                  <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                  <h2
+                    class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2"
+                  >
                     {{ slide.title }}
                   </h2>
-                  <p class="text-lg text-white/90">
+                  <p class="text-sm sm:text-lg text-white/90">
                     {{ slide.subtitle }}
                   </p>
                 </div>
@@ -273,19 +285,21 @@ const getGreeting = () => {
           </TransitionGroup>
 
           <button
-            class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all"
+            class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 sm:p-2 transition-all"
             @click="prevImage"
           >
-            <Icon name="lucide:chevron-left" class="h-6 w-6" />
+            <Icon name="lucide:chevron-left" class="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
-            class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all"
+            class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1.5 sm:p-2 transition-all"
             @click="nextImage"
           >
-            <Icon name="lucide:chevron-right" class="h-6 w-6" />
+            <Icon name="lucide:chevron-right" class="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          <div
+            class="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-2"
+          >
             <button
               v-for="(_, index) in carouselImages"
               :key="index"
@@ -302,12 +316,16 @@ const getGreeting = () => {
       </section>
 
       <section>
-        <h2 class="text-2xl font-bold text-white mb-4">Dias da Semana</h2>
-        <div class="grid grid-cols-7 gap-2 md:gap-4">
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+          Dias da Semana
+        </h2>
+        <div
+          class="flex md:grid md:grid-cols-7 gap-2 md:gap-4 overflow-x-auto pb-1 -mx-1 px-1 md:mx-0 md:px-0"
+        >
           <button
             v-for="day in weekDays"
             :key="day.value"
-            class="card-default p-4 text-center transition-all hover:scale-105"
+            class="min-w-[84px] md:min-w-0 card-default px-3 py-3 md:p-4 text-center transition-all md:hover:scale-105"
             :class="
               day.value === currentDay
                 ? 'bg-brand-gradient border-transparent'
@@ -326,15 +344,17 @@ const getGreeting = () => {
       </section>
 
       <section>
-        <h2 class="text-2xl font-bold text-white mb-4">Atalhos Rápidos</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+          Atalhos Rápidos
+        </h2>
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4"
         >
           <NuxtLink
             v-for="shortcut in shortcuts"
             :key="shortcut.title"
             :to="shortcut.route"
-            class="card-default group hover:bg-zinc-800/70 transition-all hover:scale-105 hover:shadow-xl relative overflow-hidden"
+            class="card-default group hover:bg-zinc-800/70 transition-all md:hover:scale-105 hover:shadow-xl relative overflow-hidden"
           >
             <div
               v-if="shortcut.count > 0"
@@ -357,7 +377,7 @@ const getGreeting = () => {
             </div>
 
             <h3
-              class="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors"
+              class="text-base sm:text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors"
             >
               {{ shortcut.title }}
             </h3>

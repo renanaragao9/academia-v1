@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\TrainingSheet;
+namespace App\Services\Assessment;
 
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
-class IndexTrainingSheetService
+class IndexAssessmentService
 {
     public function run(array $data): ?Collection
     {
@@ -25,13 +25,9 @@ class IndexTrainingSheetService
             return null;
         }
 
-        return $student->trainingSheets()
-            ->with([
-                'divisions.trainingDivision',
-                'divisions.exercises.exercise',
-            ])
-            ->where('is_active', true)
-            ->orderByDesc('start_date')
+        return $student->assessments()
+            ->with('measurementType')
+            ->orderByDesc('assessed_at')
             ->get();
     }
 }

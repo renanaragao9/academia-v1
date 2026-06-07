@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\Api\V1\TrainingSheet\IndexTrainingSheetRequest;
-use App\Http\Resources\Api\V1\Student\StudentResource;
-use App\Services\Student\ShowStudentService;
+use App\Http\Resources\Api\V1\TrainingSheet\TrainingSheetResource;
+use App\Services\TrainingSheet\IndexTrainingSheetService;
 use Illuminate\Http\JsonResponse;
 
 class TrainingSheetController extends BaseController
 {
     public function index(
         IndexTrainingSheetRequest $indexTrainingSheetRequest,
-        ShowStudentService $showStudentService
+        IndexTrainingSheetService $indexTrainingSheetService
     ): JsonResponse {
         $data = $indexTrainingSheetRequest->validated();
-        $student = $showStudentService->run($data);
+        $sheets = $indexTrainingSheetService->run($data);
 
-        if (! $student) {
+        if ($sheets === null) {
             return $this->errorResponse(
                 errors: ['student' => 'Aluno não encontrado.'],
                 message: 'Aluno não encontrado.',
@@ -26,8 +26,8 @@ class TrainingSheetController extends BaseController
         }
 
         return $this->successResponse(
-            data: new StudentResource($student),
-            message: 'Aluno encontrado com sucesso.'
+            data: TrainingSheetResource::collection($sheets),
+            message: 'Fichas de treino carregadas com sucesso.'
         );
     }
 }

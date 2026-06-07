@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\TrainingSheet;
+namespace App\Services\MealPlan;
 
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
-class IndexTrainingSheetService
+class IndexMealPlanService
 {
     public function run(array $data): ?Collection
     {
@@ -25,10 +25,10 @@ class IndexTrainingSheetService
             return null;
         }
 
-        return $student->trainingSheets()
+        return $student->mealPlans()
             ->with([
-                'divisions.trainingDivision',
-                'divisions.exercises.exercise',
+                'meals.mealType',
+                'meals.foods.food',
             ])
             ->where('is_active', true)
             ->orderByDesc('start_date')

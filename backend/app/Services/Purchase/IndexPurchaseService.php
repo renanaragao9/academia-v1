@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services\TrainingSheet;
+namespace App\Services\Purchase;
 
+use App\Models\Sale;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
-class IndexTrainingSheetService
+class IndexPurchaseService
 {
     public function run(array $data): ?Collection
     {
@@ -25,13 +26,10 @@ class IndexTrainingSheetService
             return null;
         }
 
-        return $student->trainingSheets()
-            ->with([
-                'divisions.trainingDivision',
-                'divisions.exercises.exercise',
-            ])
-            ->where('is_active', true)
-            ->orderByDesc('start_date')
+        return Sale::query()
+            ->with(['saleItems.item'])
+            ->where('student_id', $student->id)
+            ->orderByDesc('date_sale')
             ->get();
     }
 }
