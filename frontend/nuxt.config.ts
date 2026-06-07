@@ -1,33 +1,37 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
 
   runtimeConfig: {
     public: {
-      // Sobrescrita em produção via NUXT_PUBLIC_API_BASE=https://api.seudominio.com.br
-      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost:8000/api',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? "http://localhost:8000/api",
     },
   },
+
   modules: [
-    '@nuxt/eslint',
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
   ],
 
   fonts: {
     families: [
-      { name: 'Inter', provider: 'google', weights: [400, 500, 600, 700, 800, 900] },
+      {
+        name: "Inter",
+        provider: "google",
+        weights: [400, 500, 600, 700, 800, 900],
+      },
     ],
   },
 
   app: {
     head: {
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1",
     },
   },
 
@@ -36,10 +40,10 @@ export default defineNuxtConfig({
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ["Inter", "sans-serif"],
           },
         },
       },
     },
   },
-})
+});

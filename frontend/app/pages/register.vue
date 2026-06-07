@@ -72,7 +72,6 @@ const handleSubmit = async () => {
     class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
   >
     <div class="w-full max-w-md space-y-8">
-      <!-- Header -->
       <div class="text-center">
         <h1 class="text-3xl font-bold text-gray-900">Crie sua conta</h1>
         <p class="mt-2 text-sm text-gray-600">
@@ -86,23 +85,19 @@ const handleSubmit = async () => {
         </p>
       </div>
 
-      <!-- Mensagem de erro -->
       <div v-if="errorMessage" class="rounded-md bg-red-50 p-4">
         <p class="text-sm font-medium text-red-800">
           {{ errorMessage }}
         </p>
       </div>
 
-      <!-- Mensagem de sucesso -->
       <div v-if="successMessage" class="rounded-md bg-green-50 p-4">
         <p class="text-sm font-medium text-green-800">
           {{ successMessage }}
         </p>
       </div>
 
-      <!-- Formulário de Registro -->
       <form @submit.prevent="handleSubmit" class="mt-8 space-y-6">
-        <!-- Nome -->
         <div>
           <label for="name" class="block text-sm font-medium text-gray-700">
             Nome Completo
@@ -118,7 +113,6 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">
             E-mail
@@ -134,7 +128,6 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Senha -->
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700">
             Senha (mínimo 8 caracteres)
@@ -151,7 +144,6 @@ const handleSubmit = async () => {
           />
         </div>
 
-        <!-- Confirmar Senha -->
         <div>
           <label
             for="password-confirm"
@@ -177,7 +169,6 @@ const handleSubmit = async () => {
           </p>
         </div>
 
-        <!-- Checkbox Termos -->
         <div class="flex items-center">
           <input
             id="terms"
@@ -193,7 +184,6 @@ const handleSubmit = async () => {
           </label>
         </div>
 
-        <!-- Botão de Submissão -->
         <button
           type="submit"
           :disabled="isLoading || !passwordsMatch"
@@ -204,7 +194,6 @@ const handleSubmit = async () => {
         </button>
       </form>
 
-      <!-- Link para Login -->
       <p class="text-center text-sm text-gray-600">
         Já tem uma conta?
         <NuxtLink

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// ---------------------------------------------------------------------------
-// Tipos
-// ---------------------------------------------------------------------------
 interface AcademyConfig {
   id: number;
   name: string;
@@ -11,10 +8,10 @@ interface AcademyConfig {
     email: string | null;
     phone: string | null;
     whatsapp: string | null;
-    emergency_phone: string | null;
+    emergencyPhone: string | null;
   };
   address: {
-    zip_code: string | null;
+    zipCode: string | null;
     street: string | null;
     number: string | null;
     complement: string | null;
@@ -34,66 +31,52 @@ interface AcademyConfig {
     favicon: string | null;
   };
   schedule: {
-    opening_hours: string | null;
-    opening_time: string | null;
-    closing_time: string | null;
+    openingHours: string | null;
+    openingTime: string | null;
+    closingTime: string | null;
   };
   settings: {
-    allow_student_registration: boolean;
-    allow_online_assessments: boolean;
-    send_email_notifications: boolean;
-    send_whatsapp_notifications: boolean;
-    default_training_duration_days: number | null;
-    default_assessment_duration_days: number | null;
-    max_workouts_per_student: number | null;
+    allowStudentRegistration: boolean;
+    allowOnlineAssessments: boolean;
+    sendEmailNotifications: boolean;
+    sendWhatsappNotifications: boolean;
+    defaultTrainingDurationDays: number | null;
+    defaultAssessmentDurationDays: number | null;
+    maxWorkoutsPerStudent: number | null;
   };
-  is_active: boolean;
+  isActive: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Layout
-// ---------------------------------------------------------------------------
-// Usa layout landing para a página inicial
 definePageMeta({
   layout: "landing",
 });
 
-// ---------------------------------------------------------------------------
-// Busca as configurações da academia direto na página (sem store/service)
-// useAsyncData garante SSR + cache automático por key
-// ---------------------------------------------------------------------------
 const {
   public: { apiBase },
 } = useRuntimeConfig();
 
 interface ConfigurationResponse {
-  data: AcademyConfig;
+  data: Record<string, unknown>;
 }
 
 const { data: config, error } = await useAsyncData<AcademyConfig>(
   "academy-config",
   () =>
-    $fetch<ConfigurationResponse>(`${apiBase}/v1/configuration`).then(
-      (res) => res.data,
+    $fetch<ConfigurationResponse>(`${apiBase}/v1/configuration`).then((res) =>
+      convertKeysToCamel<AcademyConfig>(res.data as AcademyConfig),
     ),
   {
-    // Não re-busca ao navegar de volta para a página (cache)
     dedupe: "defer",
   },
 );
 
-// Disponibiliza para todos os componentes filhos via provide
-provide("academyConfig", config);
+provide<Ref<AcademyConfig | null>>("academyConfig", config);
 
-// Tratamento de erro (pode ser usado para logging ou fallback UI)
 if (error.value) {
   console.error("Erro ao buscar configuração da academia:", error.value);
 }
 
-// ---------------------------------------------------------------------------
-// SEO dinâmico com fallback para valores estáticos
-// ---------------------------------------------------------------------------
-const academyName = computed(() => config.value?.name ?? "IronFit Academia");
+const academyName = computed(() => config.value?.name ?? "Academia");
 const academyDescription = computed(
   () =>
     config.value?.description ??

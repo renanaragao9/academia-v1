@@ -1,39 +1,58 @@
 <script setup lang="ts">
-const scrolled = ref(false)
-const mobileOpen = ref(false)
+interface AcademyConfig {
+  name: string | null;
+}
+
+const scrolled = ref(false);
+const mobileOpen = ref(false);
+
+const config = inject<Ref<AcademyConfig | null>>("academyConfig");
 
 const navLinks = [
-  { label: 'Planos', href: '#planos' },
-  { label: 'Modalidades', href: '#modalidades' },
-  { label: 'Estrutura', href: '#estrutura' },
-  { label: 'Depoimentos', href: '#depoimentos' },
-  { label: 'Contato', href: '#contato' },
-]
+  { label: "Planos", href: "#planos" },
+  { label: "Modalidades", href: "#modalidades" },
+  { label: "Estrutura", href: "#estrutura" },
+  { label: "Depoimentos", href: "#depoimentos" },
+  { label: "Contato", href: "#contato" },
+];
+
+const academyName = computed(() => config?.value?.name || "IronFit");
 
 onMounted(() => {
-  window.addEventListener('scroll', () => {
-    scrolled.value = window.scrollY > 20
-  })
-})
+  window.addEventListener("scroll", () => {
+    scrolled.value = window.scrollY > 20;
+  });
+});
 </script>
 
 <template>
   <header
     class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-    :class="scrolled ? 'bg-zinc-950/95 backdrop-blur-md shadow-lg shadow-black/20 border-b border-white/5' : 'bg-transparent'"
+    :class="
+      scrolled
+        ? 'bg-zinc-950/95 backdrop-blur-md shadow-lg shadow-black/20 border-b border-white/5'
+        : 'bg-transparent'
+    "
   >
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-2 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300">
+        <div
+          class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300"
+        >
           <Icon name="lucide:dumbbell" class="w-5 h-5 text-white" />
         </div>
-        <span class="text-xl font-black tracking-tight">
-          <span class="text-white">IRON</span><span class="text-orange-500">FIT</span>
+        <span
+          v-if="academyName"
+          class="text-xl font-black tracking-tight text-white"
+        >
+          {{ academyName }}
+        </span>
+        <span v-else class="text-xl font-black tracking-tight">
+          <span class="text-white">IRON</span
+          ><span class="text-orange-500">FIT</span>
         </span>
       </NuxtLink>
 
-      <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center gap-8">
         <a
           v-for="link in navLinks"
@@ -42,11 +61,12 @@ onMounted(() => {
           class="text-sm font-medium text-zinc-400 hover:text-white transition-colors duration-200 relative group"
         >
           {{ link.label }}
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300" />
+          <span
+            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300"
+          />
         </a>
       </nav>
 
-      <!-- CTA -->
       <div class="hidden md:flex items-center gap-3">
         <NuxtLink
           to="/login"
@@ -62,7 +82,6 @@ onMounted(() => {
         </a>
       </div>
 
-      <!-- Mobile menu button -->
       <button
         class="md:hidden text-zinc-400 hover:text-white transition-colors"
         aria-label="Abrir menu"
@@ -72,7 +91,6 @@ onMounted(() => {
       </button>
     </div>
 
-    <!-- Mobile Menu -->
     <Transition
       enter-active-class="transition-all duration-300 ease-out"
       enter-from-class="opacity-0 -translate-y-2"
