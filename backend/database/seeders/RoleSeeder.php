@@ -18,5 +18,10 @@ class RoleSeeder extends Seeder
         $allPermissions = Permission::pluck('id');
 
         $admin->permissions()->sync($allPermissions);
+
+        Role::updateOrCreate(
+            ['name' => 'Estudante'],
+            ['description' => 'Acesso como aluno']
+        );
     }
 }
