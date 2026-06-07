@@ -16,6 +16,7 @@ class TrainingSheetResource extends JsonResource
             'end_date' => $this->end_date?->format('Y-m-d'),
             'is_active' => $this->is_active,
             'divisions' => TrainingSheetDivisionResource::collection($this->whenLoaded('divisions')),
+            'workout_logs' => WorkoutLogResource::collection($this->whenLoaded('workoutLogs')),
         ];
     }
 }

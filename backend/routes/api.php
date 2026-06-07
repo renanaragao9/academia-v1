@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\MonthlyFeeController;
 use App\Http\Controllers\Api\V1\PurchaseController;
 use App\Http\Controllers\Api\V1\StudentController;
 use App\Http\Controllers\Api\V1\TrainingSheetController;
+use App\Http\Controllers\Api\V1\WorkoutLogController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('v1.')->group(function () {
@@ -24,4 +25,5 @@ Route::prefix('v1')->name('v1.')->group(function () {
     Route::post('meal_plans', [MealPlanController::class, 'index'])->name('meal_plans.index');
     Route::post('monthly_fees', [MonthlyFeeController::class, 'index'])->name('monthly_fees.index');
     Route::post('purchases', [PurchaseController::class, 'index'])->name('purchases.index');
+    Route::post('workout_logs', [WorkoutLogController::class, 'store'])->name('workout_logs.store');
 });

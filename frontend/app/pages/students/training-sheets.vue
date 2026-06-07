@@ -35,6 +35,29 @@ interface TrainingSheetDivision {
   exercises: TrainingExercise[];
 }
 
+interface WorkoutLogExercise {
+  id: number;
+  performedSeries: number | null;
+  performedRepetitions: string | null;
+  performedLoad: string | null;
+  completed: boolean;
+  observation: string | null;
+  exercise: Exercise;
+}
+
+interface WorkoutLog {
+  id: number;
+  startedAt: string | null;
+  finishedAt: string | null;
+  durationMinutes: number | null;
+  division: Division;
+  validator: {
+    id: number | null;
+    name: string | null;
+  };
+  logExercises: WorkoutLogExercise[];
+}
+
 interface TrainingSheet {
   id: number;
   name: string;
@@ -42,6 +65,7 @@ interface TrainingSheet {
   endDate: string | null;
   isActive: boolean;
   divisions: TrainingSheetDivision[];
+  workoutLogs: WorkoutLog[];
 }
 
 interface ApiResponse {
@@ -56,12 +80,15 @@ definePageMeta({
 const {
   public: { apiBase },
 } = useRuntimeConfig();
+const workoutLogsStore = useWorkoutLogsStore();
 
 const sheets = ref<TrainingSheet[]>([]);
 const isLoading = ref(true);
 const error = ref<string | null>(null);
 const activeSheetId = ref<number | null>(null);
 const activeDivisionId = ref<number | null>(null);
+const expandedLogs = ref<Set<number>>(new Set());
+const submitError = ref<string | null>(null);
 
 onMounted(async () => {
   const storedStudent = localStorage.getItem("student");
@@ -119,12 +146,165 @@ const activeDivision = computed<TrainingSheetDivision | null>(
 function selectSheet(sheet: TrainingSheet) {
   activeSheetId.value = sheet.id;
   activeDivisionId.value = sheet.divisions[0]?.id ?? null;
+  expandedLogs.value = new Set();
+  submitError.value = null;
+  workoutLogsStore.clearSession();
 }
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-";
-  const [year, month, day] = dateStr.split("-");
-  return `${day}/${month}/${year}`;
+  const [date, time] = dateStr.split(" ");
+  if (!date) return "-";
+  const [year, month, day] = date.split("-");
+  return time
+    ? `${day}/${month}/${year} ${time.slice(0, 5)}`
+    : `${day}/${month}/${year}`;
+}
+
+function toggleLog(logId: number): void {
+  if (expandedLogs.value.has(logId)) {
+    expandedLogs.value.delete(logId);
+    return;
+  }
+
+  expandedLogs.value.add(logId);
+}
+
+function loadLabel(value: string | null): string {
+  if (!value) {
+    return "-";
+  }
+
+  return `${value}kg`;
+}
+
+function numberFromValue(value: string | null): number | null {
+  if (!value) {
+    return null;
+  }
+
+  const numeric = Number(value);
+  return Number.isNaN(numeric) ? null : numeric;
+}
+
+function startWorkoutSession(): void {
+  submitError.value = null;
+
+  if (!activeSheet.value || !activeDivision.value) {
+    return;
+  }
+
+  const storedStudent = localStorage.getItem("student");
+  if (!storedStudent) {
+    navigateTo("/login");
+    return;
+  }
+
+  const student = JSON.parse(storedStudent) as Student;
+
+  workoutLogsStore.startSession({
+    student: {
+      code: student.code,
+      email: student.email,
+      phone: student.phone,
+    },
+    trainingSheetId: activeSheet.value.id,
+    trainingSheetDivisionId: activeDivision.value.id,
+    exercises: activeDivision.value.exercises.map((exercise) => ({
+      exerciseId: exercise.exercise.id,
+      exerciseName: exercise.exercise.name,
+      defaultSeries: exercise.series,
+      defaultRepetitions: exercise.repetitions,
+      defaultLoad: numberFromValue(exercise.load),
+    })),
+  });
+}
+
+async function saveWorkoutSession(): Promise<void> {
+  submitError.value = null;
+
+  if (!activeSheet.value) {
+    return;
+  }
+
+  try {
+    const started = workoutLogsStore.startedAt;
+    const finished = new Date().toISOString().slice(0, 19).replace("T", " ");
+    let durationMinutes: number | null = null;
+
+    if (started) {
+      const startedMs = new Date(started.replace(" ", "T")).getTime();
+      const finishedMs = new Date(finished.replace(" ", "T")).getTime();
+
+      if (
+        !Number.isNaN(startedMs) &&
+        !Number.isNaN(finishedMs) &&
+        finishedMs >= startedMs
+      ) {
+        durationMinutes = Math.max(
+          1,
+          Math.round((finishedMs - startedMs) / 60000),
+        );
+      }
+    }
+
+    const created = await workoutLogsStore.submitSession({
+      apiBase,
+      finishedAt: finished,
+      durationMinutes,
+    });
+
+    const newLog = convertKeysToCamel(created) as unknown as WorkoutLog;
+    const logs = activeSheet.value.workoutLogs ?? [];
+    activeSheet.value.workoutLogs = [newLog, ...logs].sort((a, b) =>
+      (b.startedAt ?? "").localeCompare(a.startedAt ?? ""),
+    );
+    expandedLogs.value.add(newLog.id);
+  } catch (e) {
+    submitError.value = "Nao foi possivel registrar o log de treino.";
+    console.error(e);
+  }
+}
+
+function completedExercises(log: WorkoutLog): number {
+  return log.logExercises.filter((exercise) => exercise.completed).length;
+}
+
+function logProgress(log: WorkoutLog): number {
+  const total = log.logExercises.length;
+  if (total === 0) {
+    return 0;
+  }
+
+  return Math.round((completedExercises(log) / total) * 100);
+}
+
+function logStatus(
+  log: WorkoutLog,
+): "Finalizado" | "Em andamento" | "Não iniciado" {
+  if (log.finishedAt) {
+    return "Finalizado";
+  }
+
+  if (log.startedAt || completedExercises(log) > 0) {
+    return "Em andamento";
+  }
+
+  return "Não iniciado";
+}
+
+function logStatusClass(log: WorkoutLog): string {
+  const status = logStatus(log);
+
+  if (status === "Finalizado") {
+    return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+  }
+
+  if (status === "Em andamento") {
+    return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+  }
+
+  return "bg-zinc-700/40 text-zinc-300 border-zinc-600";
 }
 </script>
 
@@ -266,6 +446,116 @@ function formatDate(dateStr: string | null): string {
               </button>
             </div>
 
+            <div v-if="activeDivision" class="card-default p-4 sm:p-5 mb-4">
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+              >
+                <div>
+                  <h4 class="text-sm sm:text-base font-semibold text-white">
+                    Registrar treino {{ activeDivision.division.name }}
+                  </h4>
+                  <p class="text-xs sm:text-sm text-zinc-400">
+                    Inicie a sessao, marque os exercicios e salve o log.
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <button
+                    v-if="!workoutLogsStore.hasSession"
+                    class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium bg-orange-500 hover:bg-orange-600 text-white transition-colors"
+                    @click="startWorkoutSession"
+                  >
+                    Iniciar treino
+                  </button>
+
+                  <template v-else>
+                    <button
+                      class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition-colors disabled:opacity-60"
+                      :disabled="workoutLogsStore.isSubmitting"
+                      @click="saveWorkoutSession"
+                    >
+                      {{
+                        workoutLogsStore.isSubmitting
+                          ? "Salvando..."
+                          : "Finalizar e salvar"
+                      }}
+                    </button>
+                    <button
+                      class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium bg-zinc-700 hover:bg-zinc-600 text-white transition-colors"
+                      @click="workoutLogsStore.clearSession()"
+                    >
+                      Cancelar
+                    </button>
+                  </template>
+                </div>
+              </div>
+
+              <div v-if="workoutLogsStore.hasSession" class="mt-4 space-y-2">
+                <p class="text-xs text-zinc-400">
+                  Inicio: {{ formatDate(workoutLogsStore.startedAt) }}
+                </p>
+
+                <div
+                  v-for="exercise in workoutLogsStore.exercises"
+                  :key="exercise.exerciseId"
+                  class="bg-zinc-800/50 rounded-lg p-3"
+                >
+                  <div
+                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                  >
+                    <p class="text-sm text-white font-medium">
+                      {{ exercise.exerciseName }}
+                    </p>
+                    <label
+                      class="inline-flex items-center gap-2 text-xs text-zinc-300"
+                    >
+                      <input
+                        v-model="exercise.completed"
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-zinc-500 bg-zinc-800 text-orange-500 focus:ring-orange-500"
+                      />
+                      Concluido
+                    </label>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2">
+                    <input
+                      v-model.number="exercise.performedSeries"
+                      type="number"
+                      min="1"
+                      placeholder="Series"
+                      class="w-full rounded-md border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-xs text-zinc-200"
+                    />
+                    <input
+                      v-model="exercise.performedRepetitions"
+                      type="text"
+                      placeholder="Repeticoes"
+                      class="w-full rounded-md border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-xs text-zinc-200"
+                    />
+                    <input
+                      v-model.number="exercise.performedLoad"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="Carga (kg)"
+                      class="w-full rounded-md border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-xs text-zinc-200"
+                    />
+                  </div>
+
+                  <input
+                    v-model="exercise.observation"
+                    type="text"
+                    placeholder="Observacao"
+                    class="w-full rounded-md border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-xs text-zinc-200 mt-2"
+                  />
+                </div>
+              </div>
+
+              <p v-if="submitError" class="mt-3 text-xs text-red-400">
+                {{ submitError }}
+              </p>
+            </div>
+
             <!-- Active division exercises -->
             <div v-if="activeDivision" class="card-default overflow-hidden">
               <div
@@ -342,6 +632,151 @@ function formatDate(dateStr: string | null): string {
                       />
                       {{ ex.load }}kg
                     </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-default overflow-hidden">
+            <div
+              class="px-4 sm:px-6 py-4 border-b border-zinc-700/60 flex items-center justify-between"
+            >
+              <div>
+                <h3 class="text-base sm:text-lg font-bold text-white">
+                  Histórico de Treinos
+                </h3>
+                <p class="text-sm text-zinc-400">
+                  {{ activeSheet.workoutLogs.length }}
+                  {{
+                    activeSheet.workoutLogs.length === 1 ? "sessão" : "sessões"
+                  }}
+                </p>
+              </div>
+              <Icon name="lucide:history" class="h-6 w-6 text-orange-500" />
+            </div>
+
+            <div
+              v-if="activeSheet.workoutLogs.length === 0"
+              class="px-4 sm:px-6 py-8 text-center text-zinc-400"
+            >
+              Nenhum treino registrado nesta ficha.
+            </div>
+
+            <div v-else class="divide-y divide-zinc-700/60">
+              <div
+                v-for="log in activeSheet.workoutLogs"
+                :key="log.id"
+                class="px-4 sm:px-6 py-4"
+              >
+                <button
+                  class="w-full text-left flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+                  @click="toggleLog(log.id)"
+                >
+                  <div>
+                    <p class="text-white font-semibold">
+                      {{
+                        log.division?.name
+                          ? `Treino ${log.division.name}`
+                          : "Treino"
+                      }}
+                    </p>
+                    <p class="text-xs text-zinc-400 mt-0.5">
+                      Início: {{ formatDate(log.startedAt) }}
+                      <span v-if="log.finishedAt">
+                        • Fim: {{ formatDate(log.finishedAt) }}</span
+                      >
+                      <span v-if="log.durationMinutes">
+                        • {{ log.durationMinutes }} min</span
+                      >
+                    </p>
+                    <p class="text-xs text-zinc-500 mt-0.5">
+                      Validado por: {{ log.validator?.name ?? "-" }}
+                    </p>
+                  </div>
+                  <div class="flex items-center gap-3 self-end sm:self-auto">
+                    <span
+                      :class="[
+                        'inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold border',
+                        logStatusClass(log),
+                      ]"
+                    >
+                      {{ logStatus(log) }}
+                    </span>
+                    <span
+                      class="inline-flex items-center gap-1 bg-zinc-700 text-zinc-200 text-xs font-medium px-2.5 py-1 rounded-md"
+                    >
+                      {{ completedExercises(log) }}/{{
+                        log.logExercises.length
+                      }}
+                      concluídos
+                    </span>
+                    <Icon
+                      :name="
+                        expandedLogs.has(log.id)
+                          ? 'lucide:chevron-up'
+                          : 'lucide:chevron-down'
+                      "
+                      class="h-4 w-4 text-zinc-400"
+                    />
+                  </div>
+                </button>
+
+                <div
+                  class="mt-3 h-1.5 bg-zinc-700/70 rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-orange-500 rounded-full transition-all"
+                    :style="{ width: `${logProgress(log)}%` }"
+                  />
+                </div>
+                <p class="mt-1 text-[11px] text-zinc-500">
+                  Progresso: {{ logProgress(log) }}%
+                </p>
+
+                <div v-if="expandedLogs.has(log.id)" class="mt-4 space-y-2">
+                  <div
+                    v-for="exercise in log.logExercises"
+                    :key="exercise.id"
+                    class="bg-zinc-800/50 rounded-lg px-3 py-3"
+                  >
+                    <div
+                      class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                    >
+                      <p class="text-sm text-white font-medium">
+                        {{ exercise.exercise.name }}
+                      </p>
+                      <span
+                        :class="[
+                          'inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold border',
+                          exercise.completed
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+                        ]"
+                      >
+                        {{ exercise.completed ? "Concluído" : "Pendente" }}
+                      </span>
+                    </div>
+
+                    <div
+                      class="flex flex-wrap gap-3 mt-2 text-xs text-zinc-400"
+                    >
+                      <span>Séries: {{ exercise.performedSeries ?? "-" }}</span>
+                      <span
+                        >Repetições:
+                        {{ exercise.performedRepetitions ?? "-" }}</span
+                      >
+                      <span
+                        >Carga: {{ loadLabel(exercise.performedLoad) }}</span
+                      >
+                    </div>
+
+                    <p
+                      v-if="exercise.observation"
+                      class="text-xs text-zinc-500 italic mt-2"
+                    >
+                      {{ exercise.observation }}
+                    </p>
                   </div>
                 </div>
               </div>

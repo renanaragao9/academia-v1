@@ -29,6 +29,9 @@ class IndexTrainingSheetService
             ->with([
                 'divisions.trainingDivision',
                 'divisions.exercises.exercise',
+                'workoutLogs.sheetDivision.trainingDivision',
+                'workoutLogs.validator',
+                'workoutLogs.logExercises.exercise',
             ])
             ->where('is_active', true)
             ->orderByDesc('start_date')
