@@ -11,5 +11,6 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
     Route::prefix('students')->group(function () {
         Route::post('show', [StudentController::class, 'show'])->name('students.show');
+        Route::get('{student}/dashboard', [StudentController::class, 'dashboard'])->name('students.dashboard');
     });
 });
