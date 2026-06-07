@@ -2,50 +2,29 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\UpdateConfigurationRequest;
-use App\Http\Resources\Api\V1\ConfigurationResource;
-use App\Services\ConfigurationService;
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\Api\V1\Configuration\ConfigurationResource;
+use App\Services\Configuration\ShowConfigurationService;
 use Illuminate\Http\JsonResponse;
 
-class ConfigurationController extends Controller
+class ConfigurationController extends BaseController
 {
-    public function __construct(
-        private readonly ConfigurationService $service,
-    ) {}
-
-    /**
-     * Retorna a configuração ativa da academia.
-     *
-     * GET /api/v1/configuration
-     */
-    public function show(): JsonResponse
-    {
-        $configuration = $this->service->getActive();
+    public function show(
+        ShowConfigurationService $showConfigurationService
+    ): JsonResponse {
+        $configuration = $showConfigurationService->run();
 
         if (! $configuration) {
-            return response()->json([
-                'message' => 'Nenhuma configuração encontrada.',
-            ], 404);
+            return $this->errorResponse(
+                errors: ['configuration' => 'Configuração não encontrada.'],
+                message: 'Configuração não encontrada.',
+                statusCode: 404
+            );
         }
 
-        return response()->json([
-            'data' => new ConfigurationResource($configuration),
-        ]);
-    }
-
-    /**
-     * Atualiza ou cria a configuração da academia.
-     *
-     * PUT /api/v1/configuration
-     */
-    public function update(UpdateConfigurationRequest $request): JsonResponse
-    {
-        $configuration = $this->service->updateOrCreate($request->validated());
-
-        return response()->json([
-            'message' => 'Configuração atualizada com sucesso.',
-            'data'    => new ConfigurationResource($configuration),
-        ]);
+        return $this->successResponse(
+            data: new ConfigurationResource($configuration),
+            message: 'Configuração encontrada com sucesso.'
+        );
     }
 }
