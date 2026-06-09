@@ -74,7 +74,7 @@ class StudentForm
 
                         Select::make('user_id')
                             ->label('Instrutor / Responsável')
-                            ->options(fn () => User::orderBy('name')->pluck('name', 'id'))
+                            ->options(fn () => User::whereDoesntHave('role', fn ($q) => $q->where('name', 'Estudante'))->orderBy('name')->pluck('name', 'id'))
                             ->searchable()
                             ->nullable()
                             ->columnSpanFull(),
