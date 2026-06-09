@@ -1,5 +1,3 @@
-@props(['url'])
-
 <tr>
     <td class="header-bg">
         <a href="{{ $url }}" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
