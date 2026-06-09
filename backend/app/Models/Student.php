@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Notifications\Notifiable;
 
 class Student extends BaseModel
 {
+    use Notifiable;
     protected $table = 'students';
 
     protected $fillable = [

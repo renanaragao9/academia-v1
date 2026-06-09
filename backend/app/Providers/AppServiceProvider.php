@@ -36,6 +36,7 @@ use App\Models\TrainingSheet;
 use App\Models\TrainingSheetDivision;
 use App\Models\WorkoutLog;
 use App\Models\WorkoutLogExercise;
+use App\Observers\StudentObserver;
 use App\Policies\AssessmentPolicy;
 use App\Policies\BookingPolicy;
 use App\Policies\BookingStudentPolicy;
@@ -130,5 +131,7 @@ class AppServiceProvider extends AuthServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+
+        Student::observe(StudentObserver::class);
     }
 }
