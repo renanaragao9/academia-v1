@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\MonthlyFees\Tables;
 
+use App\Services\Pdf\GenerateMonthlyFeeReceiptService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -82,6 +84,15 @@ class MonthlyFeesTable
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (MonthlyFee $record) {
+                        $service = app(GenerateMonthlyFeeReceiptService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "mensalidade-{$record->uuid}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
             ])

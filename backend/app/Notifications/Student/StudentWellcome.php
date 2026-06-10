@@ -30,9 +30,9 @@ class StudentWellcome extends Notification implements ShouldQueue
         $appName = config('app.name');
 
         $mail = (new MailMessage)
-            ->subject("Seja bem-vindo à {$appName}! 🏋️")
-            ->greeting("Olá {$student->name},")
-            ->line("É com grande satisfação que damos as boas-vindas à **{$appName}**!")
+            ->subject("Seja bem-vindo à {$appName}!")
+            ->greeting("Olá {$student->name} 👋,")
+            ->line("É com grande satisfação que damos as boas-vindas à **{$appName}**! 🏋️")
             ->line('Estamos felizes em tê-lo como parte da nossa família. Prepare-se para transformar seus limites em resultados!')
             ->line('Aqui estão algumas coisas que você pode fazer agora:')
             ->line('- 📋 Acessar e gerenciar suas **fichas de treino**')
