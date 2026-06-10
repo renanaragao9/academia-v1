@@ -61,14 +61,12 @@ class MonthlyFeeForm
                                     return;
                                 }
 
-                                // Preenche valor do plano e valor pago com o mesmo valor base
                                 if ($plan->amount_base !== null) {
                                     $full = number_format((float) $plan->amount_base, 2, '.', '');
                                     $set('full_payment', $full);
                                     $set('amount_paid', $full);
                                 }
 
-                                // Preenche datas com base em period_days
                                 if ($plan->period_days) {
                                     $start = $get('start_date');
                                     $startDate = $start ? Carbon::parse($start) : now();

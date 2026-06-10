@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MonthlyFees\Tables;
 
+use App\Models\MonthlyFee;
 use App\Services\Pdf\GenerateMonthlyFeeReceiptService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -85,7 +86,7 @@ class MonthlyFeesTable
             ])
             ->recordActions([
                 Action::make('downloadPdf')
-                    ->label('PDF')
+                    ->label('Recibo')
                     ->icon('heroicon-o-document-arrow-down')
                     ->action(function (MonthlyFee $record) {
                         $service = app(GenerateMonthlyFeeReceiptService::class);

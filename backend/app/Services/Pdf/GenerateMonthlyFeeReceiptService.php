@@ -11,7 +11,13 @@ class GenerateMonthlyFeeReceiptService
     {
         $fee->loadMissing(['student', 'planType', 'paymentType', 'user']);
 
-        $html = view('pdf.monthly-fee.receipt', compact('fee'))->render();
+        $image = base64_encode(
+            file_get_contents(
+                public_path('image/pdf/payment-Information-cuate.png')
+            )
+        );
+
+        $html = view('pdf.monthly-fee.receipt', compact('fee', 'image'))->render();
 
         $path = storage_path("app/public/monthly-fees/receipt-{$fee->uuid}.pdf");
 
