@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\MealPlans\Tables;
 
+use App\Models\MealPlan;
+use App\Services\Pdf\GenerateMealPlanPdfService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -57,6 +60,15 @@ class MealPlansTable
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('Plano Alimentar PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (MealPlan $record) {
+                        $service = app(GenerateMealPlanPdfService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "plano-alimentar-{$record->id}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
             ])

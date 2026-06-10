@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Sales\Tables;
 
+use App\Models\Sale;
+use App\Services\Pdf\GenerateSaleReceiptPdfService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -108,6 +111,15 @@ class SalesTable
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('Recibo')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (Sale $record) {
+                        $service = app(GenerateSaleReceiptPdfService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "recibo-{$record->uuid}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
             ])

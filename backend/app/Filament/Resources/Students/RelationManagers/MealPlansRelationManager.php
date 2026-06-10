@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Students\RelationManagers;
 
 use App\Filament\Resources\MealPlans\MealPlanResource;
+use App\Models\MealPlan;
+use App\Services\Pdf\GenerateMealPlanPdfService;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -60,6 +62,15 @@ class MealPlansRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('Plano Alimentar PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (MealPlan $record) {
+                        $service = app(GenerateMealPlanPdfService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "plano-alimentar-{$record->id}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),

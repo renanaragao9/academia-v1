@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Students\RelationManagers;
 
 use App\Filament\Resources\TrainingSheets\TrainingSheetResource;
+use App\Models\TrainingSheet;
+use App\Services\Pdf\GenerateTrainingSheetPdfService;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -56,6 +58,15 @@ class TrainingSheetsRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('Ficha PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (TrainingSheet $record) {
+                        $service = app(GenerateTrainingSheetPdfService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "ficha-{$record->id}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),

@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Students\RelationManagers;
 
 use App\Filament\Resources\MonthlyFees\MonthlyFeeResource;
+use App\Models\MonthlyFee;
+use App\Services\Pdf\GenerateMonthlyFeeReceiptService;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -66,6 +68,15 @@ class MonthlyFeesRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                Action::make('downloadPdf')
+                    ->label('Recibo')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (MonthlyFee $record) {
+                        $service = app(GenerateMonthlyFeeReceiptService::class);
+                        $path = $service->run($record);
+
+                        return response()->download($path, "mensalidade-{$record->uuid}.pdf")->deleteFileAfterSend();
+                    }),
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),

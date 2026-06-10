@@ -14,8 +14,8 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->text('observation')->nullable();
             $table->dateTime('date_sale');
-            $table->decimal('amount_price', 10, 2);
-            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('amount_price', 10, 2)->nullable();
+            $table->decimal('discount_amount', 10, 2)->nullable();
             $table->decimal('total_amount', 10, 2);
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('student_id')->nullable()->constrained('students')->cascadeOnDelete();
