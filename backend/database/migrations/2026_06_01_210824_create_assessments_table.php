@@ -10,18 +10,19 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
-            $table->text('notes')->nullable();
-            $table->date('assessed_at');
-            $table->decimal('value', 8, 2);
+            $table->string('name', 255)->nullable();
+            $table->text('observations')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->foreignId('measurement_type_id')->constrained('measurement_types')->cascadeOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
 
             $table->index('student_id');
-            $table->index('measurement_type_id');
-            $table->index('user_id');
+            $table->index('created_by');
             $table->index('deleted_at');
             $table->index(['student_id', 'created_at']);
         });

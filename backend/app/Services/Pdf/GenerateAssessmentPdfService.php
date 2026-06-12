@@ -2,7 +2,7 @@
 
 namespace App\Services\Pdf;
 
-use App\Models\Assessment;
+use App\Models\AssessmentItem;
 use App\Models\Configuration;
 use App\Models\Student;
 use Illuminate\Support\Facades\Storage;
@@ -16,9 +16,9 @@ class GenerateAssessmentPdfService
 
         $company = Configuration::where('is_active', true)->first();
 
-        $query = Assessment::where('student_id', $studentId)
-            ->with(['measurementType', 'user'])
-            ->orderBy('assessed_at', 'desc');
+        $query = AssessmentItem::whereHas('assessment', fn ($q) => $q->where('student_id', $studentId))
+            ->with(['measurementType', 'user', 'assessment'])
+            ->orderByDesc('assessed_at');
 
         if ($dateFrom) {
             $query->whereDate('assessed_at', '>=', $dateFrom);
@@ -28,9 +28,9 @@ class GenerateAssessmentPdfService
             $query->whereDate('assessed_at', '<=', $dateTo);
         }
 
-        $assessments = $query->get();
+        $items = $query->get();
 
-        $grouped = $assessments->groupBy(fn ($item) => $item->measurementType->name);
+        $grouped = $items->groupBy(fn ($item) => $item->measurementType->name);
 
         $image = base64_encode(
             file_get_contents(

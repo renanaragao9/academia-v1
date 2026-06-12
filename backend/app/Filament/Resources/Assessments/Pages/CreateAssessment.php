@@ -11,17 +11,12 @@ class CreateAssessment extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id'] = auth()->id();
+        $userId = auth()->id();
+
+        $data['created_by'] = $userId;
+        $data['updated_by'] = $userId;
 
         return $data;
-    }
-
-    protected function preserveFormDataWhenCreatingAnother(array $data): array
-    {
-        return [
-            'student_id' => $data['student_id'] ?? null,
-            'assessed_at' => now()->toDateString(),
-        ];
     }
 
     protected function fillForm(): void
@@ -29,7 +24,7 @@ class CreateAssessment extends CreateRecord
         $this->callHook('beforeFill');
 
         $data = [
-            'assessed_at' => now()->toDateString(),
+            'is_active' => true,
         ];
 
         if ($studentId = request()->query('student_id')) {

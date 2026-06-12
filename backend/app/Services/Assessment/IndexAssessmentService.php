@@ -26,8 +26,8 @@ class IndexAssessmentService
         }
 
         return $student->assessments()
-            ->with('measurementType')
-            ->orderByDesc('assessed_at')
+            ->with('items.measurementType')
+            ->orderByDesc('created_at')
             ->get();
     }
 }

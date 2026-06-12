@@ -9,89 +9,47 @@ use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class AssessmentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'assessments';
 
+    protected static ?string $relatedResource = AssessmentResource::class;
+
     protected static ?string $title = 'Avaliações';
-
-    public function form(Schema $schema): Schema
-    {
-        $studentId = $this->getOwnerRecord()->getKey();
-
-        return $schema
-            ->columns(2)
-            ->components([
-                Select::make('measurement_type_id')
-                    ->label('Tipo de Medição')
-                    ->relationship(
-                        name: 'measurementType',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query, Get $get) => $query
-                            ->whereNotIn('id',
-                                Assessment::where('student_id', $studentId)
-                                    ->where('measurement_type_id', '!=', $get('measurement_type_id'))
-                                    ->pluck('measurement_type_id')
-                            )
-                            ->orderBy('name'),
-                    )
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-
-                TextInput::make('value')
-                    ->label('Valor')
-                    ->numeric()
-                    ->step(0.01)
-                    ->required(),
-
-                DatePicker::make('assessed_at')
-                    ->label('Data da Avaliação')
-                    ->displayFormat('d/m/Y')
-                    ->default(now())
-                    ->required(),
-
-                Textarea::make('notes')
-                    ->label('Observações')
-                    ->nullable()
-                    ->columnSpanFull(),
-            ]);
-    }
 
     public function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('measurementType.name')
-                    ->label('Tipo de Medição')
+                TextColumn::make('name')
+                    ->label('Avaliação')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('value')
-                    ->label('Valor')
-                    ->numeric()
-                    ->sortable(),
-
-                TextColumn::make('assessed_at')
-                    ->label('Data da Avaliação')
+                TextColumn::make('start_date')
+                    ->label('Início')
                     ->date('d/m/Y')
+                    ->placeholder('-')
                     ->sortable(),
 
-                TextColumn::make('user.name')
-                    ->label('Avaliador')
+                TextColumn::make('end_date')
+                    ->label('Fim')
+                    ->date('d/m/Y')
                     ->placeholder('-')
-                    ->toggleable(),
+                    ->sortable(),
+
+                IconColumn::make('is_active')
+                    ->label('Ativo')
+                    ->boolean(),
+
+                TextColumn::make('items_total')
+                    ->label('Medições')
+                    ->state(fn (Assessment $record): int => $record->items()->count()),
 
                 TextColumn::make('updated_at')
                     ->label('Atualizado em')
@@ -99,21 +57,8 @@ class AssessmentsRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('assessed_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->headerActions([
-                Action::make('downloadPdf')
-                    ->label('Avaliação PDF')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->action(function () {
-                        $student = $this->getOwnerRecord();
-                        $service = app(GenerateAssessmentPdfService::class);
-                        $path = $service->run($student->id);
-
-                        $slug = str($student->name)->slug()->value();
-
-                        return response()->download($path, "avaliacoes-{$slug}.pdf")->deleteFileAfterSend();
-                    }),
-
                 Action::make('createAssessment')
                     ->label('Nova Avaliação')
                     ->color('primary')
@@ -123,6 +68,17 @@ class AssessmentsRelationManager extends RelationManager
             ])
             ->recordActions([
                 ViewAction::make(),
+                Action::make('downloadPdf')
+                    ->label('Avaliação PDF')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function (Assessment $record) {
+                        $service = app(GenerateAssessmentPdfService::class);
+                        $path = $service->run($record->student_id);
+
+                        $slug = str($record->student->name)->slug()->value();
+
+                        return response()->download($path, "avaliacoes-{$slug}.pdf")->deleteFileAfterSend();
+                    }),
                 EditAction::make(),
                 DeleteAction::make(),
             ]);

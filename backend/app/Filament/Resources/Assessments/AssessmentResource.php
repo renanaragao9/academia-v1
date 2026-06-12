@@ -25,7 +25,7 @@ class AssessmentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
-    protected static ?string $recordTitleAttribute = 'value';
+    protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $modelLabel = 'Avaliação Física';
 

@@ -71,8 +71,6 @@
                 </div>
             </div>
 
-            @php $groupKeys = $grouped->keys() @endphp
-
             @if ($grouped->isNotEmpty())
             <div class="grid grid-cols-2 gap-3">
                 @foreach ($grouped as $typeName => $items)
@@ -85,22 +83,24 @@
                                 <tr class="bg-zinc-50">
                                     <th class="text-left px-2 py-1 font-semibold text-zinc-500 uppercase tracking-wider w-6">#</th>
                                     <th class="text-left px-2 py-1 font-semibold text-zinc-500 uppercase tracking-wider">Valor</th>
+                                    <th class="text-center px-2 py-1 font-semibold text-zinc-500 uppercase tracking-wider">Unidade</th>
                                     <th class="text-center px-2 py-1 font-semibold text-zinc-500 uppercase tracking-wider">Data</th>
                                     <th class="text-center px-2 py-1 font-semibold text-zinc-500 uppercase tracking-wider">Avaliador</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($items as $assessment)
+                                @foreach ($items as $item)
                                 <tr class="border-t border-zinc-100">
                                     <td class="px-2 py-1 text-zinc-400 font-mono">{{ $loop->iteration }}</td>
-                                    <td class="px-2 py-1 text-zinc-800 font-medium">{{ number_format((float) $assessment->value, 2, ',', '.') }}</td>
-                                    <td class="px-2 py-1 text-center font-mono text-zinc-700">{{ $assessment->assessed_at?->format('d/m/Y') ?? '—' }}</td>
-                                    <td class="px-2 py-1 text-center font-mono text-zinc-700">{{ $assessment->user?->name ?? '—' }}</td>
+                                    <td class="px-2 py-1 text-zinc-800 font-medium">{{ number_format((float) $item->value, 2, ',', '.') }}</td>
+                                    <td class="px-2 py-1 text-center font-mono text-zinc-700">{{ $item->unit ?? '—' }}</td>
+                                    <td class="px-2 py-1 text-center font-mono text-zinc-700">{{ $item->assessed_at?->format('d/m/Y') ?? '—' }}</td>
+                                    <td class="px-2 py-1 text-center font-mono text-zinc-700">{{ $item->user?->name ?? '—' }}</td>
                                 </tr>
-                                @if ($assessment->notes)
+                                @if ($item->notes)
                                 <tr class="border-t border-zinc-100">
-                                    <td colspan="4" class="px-2 pb-1 text-[9px] text-zinc-500 italic">
-                                        <span class="font-semibold not-italic text-zinc-600">Obs:</span> {{ $assessment->notes }}
+                                    <td colspan="5" class="px-2 pb-1 text-[9px] text-zinc-500 italic">
+                                        <span class="font-semibold not-italic text-zinc-600">Obs:</span> {{ $item->notes }}
                                     </td>
                                 </tr>
                                 @endif

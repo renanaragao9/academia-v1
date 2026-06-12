@@ -11,13 +11,12 @@ class AssessmentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'value' => $this->value,
-            'assessed_at' => $this->assessed_at?->format('Y-m-d'),
-            'notes' => $this->notes,
-            'measurement_type' => [
-                'id' => $this->measurementType?->id,
-                'name' => $this->measurementType?->name ?? '-',
-            ],
+            'name' => $this->name,
+            'start_date' => $this->start_date?->format('Y-m-d'),
+            'end_date' => $this->end_date?->format('Y-m-d'),
+            'observations' => $this->observations,
+            'is_active' => $this->is_active,
+            'items' => AssessmentItemResource::collection($this->whenLoaded('items')),
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Assessments\Schemas;
 
 use App\Models\Assessment;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -18,25 +20,32 @@ class AssessmentInfolist
                     ->columns(2)
                     ->collapsible()
                     ->schema([
+                        TextEntry::make('name')
+                            ->label('Avaliação'),
+
                         TextEntry::make('student.name')
-                            ->label('Aluno'),
-
-                        TextEntry::make('measurementType.name')
-                            ->label('Tipo de Medição'),
-
-                        TextEntry::make('value')
-                            ->label('Valor')
-                            ->numeric(),
-
-                        TextEntry::make('assessed_at')
-                            ->label('Data da Avaliação')
-                            ->date('d/m/Y'),
-
-                        TextEntry::make('user.name')
-                            ->label('Avaliador')
+                            ->label('Aluno')
                             ->placeholder('-'),
 
-                        TextEntry::make('notes')
+                        TextEntry::make('start_date')
+                            ->label('Início')
+                            ->date('d/m/Y')
+                            ->placeholder('-'),
+
+                        TextEntry::make('end_date')
+                            ->label('Fim')
+                            ->date('d/m/Y')
+                            ->placeholder('-'),
+
+                        IconEntry::make('is_active')
+                            ->label('Ativo')
+                            ->boolean(),
+
+                        TextEntry::make('items_total')
+                            ->label('Total de Medições')
+                            ->state(fn (Assessment $record): int => $record->items()->count()),
+
+                        TextEntry::make('observations')
                             ->label('Observações')
                             ->placeholder('-')
                             ->columnSpanFull(),
@@ -47,6 +56,14 @@ class AssessmentInfolist
                     ->collapsible()
                     ->collapsed()
                     ->schema([
+                        TextEntry::make('creator.name')
+                            ->label('Criado por')
+                            ->placeholder('-'),
+
+                        TextEntry::make('updater.name')
+                            ->label('Atualizado por')
+                            ->placeholder('-'),
+
                         TextEntry::make('created_at')
                             ->label('Criado em')
                             ->dateTime('d/m/Y H:i'),
@@ -54,12 +71,55 @@ class AssessmentInfolist
                         TextEntry::make('updated_at')
                             ->label('Atualizado em')
                             ->dateTime('d/m/Y H:i'),
+                    ]),
 
-                        TextEntry::make('deleted_at')
-                            ->label('Excluído em')
-                            ->dateTime('d/m/Y H:i')
-                            ->placeholder('-')
-                            ->visible(fn (Assessment $record): bool => $record->trashed()),
+                Section::make('Medições')
+                    ->description('Medições realizadas nesta avaliação.')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        RepeatableEntry::make('items_snapshot')
+                            ->label('Medições')
+                            ->state(function (Assessment $record): array {
+                                return $record->items()
+                                    ->with('measurementType')
+                                    ->orderBy('order')
+                                    ->get()
+                                    ->map(fn ($item): array => [
+                                        'measurement_type' => $item->measurementType?->name ?? '-',
+                                        'value' => $item->value,
+                                        'unit' => $item->unit,
+                                        'assessed_at' => $item->assessed_at,
+                                        'notes' => $item->notes,
+                                    ])
+                                    ->all();
+                            })
+                            ->schema([
+                                TextEntry::make('measurement_type')
+                                    ->label('Tipo')
+                                    ->weight('bold')
+                                    ->columnSpan(2),
+
+                                TextEntry::make('value')
+                                    ->label('Valor')
+                                    ->numeric()
+                                    ->placeholder('-'),
+
+                                TextEntry::make('unit')
+                                    ->label('Unidade')
+                                    ->placeholder('-'),
+
+                                TextEntry::make('assessed_at')
+                                    ->label('Data')
+                                    ->date('d/m/Y')
+                                    ->placeholder('-'),
+
+                                TextEntry::make('notes')
+                                    ->label('Observações')
+                                    ->placeholder('-')
+                                    ->columnSpanFull(),
+                            ])
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
