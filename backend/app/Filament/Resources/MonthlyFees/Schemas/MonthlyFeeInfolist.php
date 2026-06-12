@@ -46,7 +46,8 @@ class MonthlyFeeInfolist
 
                         TextEntry::make('discount_payment')
                             ->label('Desconto')
-                            ->money('BRL'),
+                            ->money('BRL')
+                            ->placeholder('-'),
 
                         TextEntry::make('amount_paid')
                             ->label('Valor Pago')

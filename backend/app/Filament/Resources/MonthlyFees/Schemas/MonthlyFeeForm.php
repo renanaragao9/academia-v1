@@ -126,7 +126,8 @@ class MonthlyFeeForm
                             ->numeric()
                             ->step(0.01)
                             ->prefix('R$')
-                            ->default(0)
+                            ->default(null)
+                            ->placeholder('-')
                             ->live()
                             ->afterStateUpdated(function (Get $get, Set $set, ?string $state): void {
                                 $full = (float) ($get('full_payment') ?? 0);

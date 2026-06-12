@@ -59,6 +59,7 @@ class MonthlyFeesTable
                 TextColumn::make('discount_payment')
                     ->label('Desconto')
                     ->money('BRL')
+                    ->placeholder('-')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
