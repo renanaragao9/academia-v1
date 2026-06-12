@@ -24,11 +24,12 @@ class CustomerRegistrationForm
                             ->required(),
                         TextInput::make('phone')
                             ->label('Telefone')
-                            ->tel()
+                            ->mask('(99) 9-9999-9999')
                             ->required(),
                         TextInput::make('email')
                             ->label('Email')
                             ->email()
+                            ->unique(ignoreRecord: true)
                             ->required(),
                         Select::make('plan_type_id')
                             ->label('Plano')

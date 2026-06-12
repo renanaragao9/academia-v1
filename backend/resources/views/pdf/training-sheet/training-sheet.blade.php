@@ -47,7 +47,7 @@
                     >
                     <div>
                         <h1 class="text-3xl font-bold text-black tracking-tight leading-tight">
-                            {{ config('app.name') }}
+                            {{ $company->name ?? config('app.name') }}
                         </h1>
                         <p class="text-white/80 text-sm mt-0.5 tracking-wide font-medium">
                             Ficha de Treino &mdash; {{ $trainingSheet->name }}
@@ -141,7 +141,21 @@
         </div>
 
         <div class="bg-zinc-900 px-8 py-4 text-center">
-            <p class="text-zinc-500 text-[11px]">{{ config('app.name') }} — Todos os direitos reservados</p>
+            @if ($logoBase64)
+                <img src="data:image/png;base64,{{ $logoBase64 }}" alt="Logo" style="max-height: 35px; width: auto; display: block; margin: 0 auto 6px;">
+            @endif
+            <p class="text-zinc-300 text-xs font-semibold">{{ $company->name ?? config('app.name') }}</p>
+            <p class="text-zinc-500 text-[11px] mt-1">
+                @if ($company?->cnpj)CNPJ: {{ $company->cnpj }} — @endif
+                @if ($company?->address){{ $company->address }}, {{ $company->number }} @endif
+                @if ($company?->neighborhood) — {{ $company->neighborhood }} @endif
+                @if ($company?->city) — {{ $company->city }}/{{ $company->state }} @endif
+            </p>
+            <p class="text-zinc-500 text-[11px] mt-1">
+                @if ($company?->phone)Tel: {{ $company->phone }} @endif
+                @if ($company?->whatsapp) — WhatsApp: {{ $company->whatsapp }} @endif
+                @if ($company?->email) — E-mail: {{ $company->email }} @endif
+            </p>
         </div>
     </div>
 </body>

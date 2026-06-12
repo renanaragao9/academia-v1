@@ -47,7 +47,7 @@
                     >
                     <div>
                         <h1 class="text-2xl font-bold text-black tracking-tight leading-tight">
-                            {{ config('app.name') }}
+                            {{ $company->name ?? config('app.name') }}
                         </h1>
                         <p class="text-white/80 text-xs mt-0.5 tracking-wide font-medium">
                             Plano Alimentar &mdash; {{ $mealPlan->name }}
@@ -129,8 +129,25 @@
 
             <div class="flex items-center justify-between text-[9px] text-zinc-400 pt-2">
                 <span>Registrado por {{ $mealPlan->creator?->name ?? '—' }} em {{ $mealPlan->created_at?->format('d/m/Y H:i') ?? '—' }}</span>
-                <span>{{ config('app.name') }}</span>
             </div>
+        </div>
+
+        <div class="bg-zinc-900 px-6 py-4 text-center">
+            @if ($logoBase64)
+                <img src="data:image/png;base64,{{ $logoBase64 }}" alt="Logo" style="max-height: 35px; width: auto; display: block; margin: 0 auto 6px;">
+            @endif
+            <p class="text-zinc-300 text-xs font-semibold">{{ $company->name ?? config('app.name') }}</p>
+            <p class="text-zinc-500 text-[10px] mt-1">
+                @if ($company?->cnpj)CNPJ: {{ $company->cnpj }} — @endif
+                @if ($company?->address){{ $company->address }}, {{ $company->number }} @endif
+                @if ($company?->neighborhood) — {{ $company->neighborhood }} @endif
+                @if ($company?->city) — {{ $company->city }}/{{ $company->state }} @endif
+            </p>
+            <p class="text-zinc-500 text-[10px] mt-1">
+                @if ($company?->phone)Tel: {{ $company->phone }} @endif
+                @if ($company?->whatsapp) — WhatsApp: {{ $company->whatsapp }} @endif
+                @if ($company?->email) — E-mail: {{ $company->email }} @endif
+            </p>
         </div>
     </div>
 </body>

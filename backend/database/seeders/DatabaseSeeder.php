@@ -46,6 +46,9 @@ class DatabaseSeeder extends Seeder
 
             // Fichas
             TrainingSheetSeeder::class,
+
+            // Agendamentos
+            BookingTypeSeeder::class,
         ]);
     }
 }

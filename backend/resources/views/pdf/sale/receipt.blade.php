@@ -39,12 +39,14 @@
 
             <div class="flex items-start justify-between relative z-10">
                 <div>
-                    <h1 class="text-3xl font-bold text-black tracking-tight">
-                        {{ config('app.name') }}
-                    </h1>
-                    <p class="text-gray-600 text-sm mt-1 tracking-wide">
-                        Recibo de Venda
-                    </p>
+                    <div>
+                        <h1 class="text-3xl font-bold text-black tracking-tight">
+                            {{ $company->name ?? config('app.name') }}
+                        </h1>
+                        <p class="text-gray-600 text-sm mt-1 tracking-wide">
+                            Recibo de Venda
+                        </p>
+                    </div>
                 </div>
                 <div class="text-right">
                     <p class="text-gray-500 text-xs uppercase tracking-[0.2em] font-semibold">
@@ -167,7 +169,21 @@
         </div>
 
         <div class="bg-zinc-900 px-8 py-5 text-center border-t border-zinc-800">
-            <p class="text-zinc-500 text-xs">{{ config('app.name') }} — Todos os direitos reservados</p>
+            @if ($logoBase64)
+                <img src="data:image/png;base64,{{ $logoBase64 }}" alt="Logo" style="max-height: 35px; width: auto; display: block; margin: 0 auto 6px;">
+            @endif
+            <p class="text-zinc-300 text-xs font-semibold">{{ $company->name ?? config('app.name') }}</p>
+            <p class="text-zinc-500 text-xs mt-1">
+                @if ($company?->cnpj)CNPJ: {{ $company->cnpj }} — @endif
+                @if ($company?->address){{ $company->address }}, {{ $company->number }} @endif
+                @if ($company?->neighborhood) — {{ $company->neighborhood }} @endif
+                @if ($company?->city) — {{ $company->city }}/{{ $company->state }} @endif
+            </p>
+            <p class="text-zinc-500 text-xs mt-1">
+                @if ($company?->phone)Tel: {{ $company->phone }} @endif
+                @if ($company?->whatsapp) — WhatsApp: {{ $company->whatsapp }} @endif
+                @if ($company?->email) — E-mail: {{ $company->email }} @endif
+            </p>
         </div>
     </div>
 </body>

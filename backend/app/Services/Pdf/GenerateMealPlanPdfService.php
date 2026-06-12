@@ -2,7 +2,9 @@
 
 namespace App\Services\Pdf;
 
+use App\Models\Configuration;
 use App\Models\MealPlan;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 
 class GenerateMealPlanPdfService
@@ -11,13 +13,23 @@ class GenerateMealPlanPdfService
     {
         $mealPlan->loadMissing(['student', 'meals.mealType', 'meals.foods.food', 'creator']);
 
+        $company = Configuration::where('is_active', true)->first();
+
         $image = base64_encode(
             file_get_contents(
                 public_path('image/pdf/physical-therapy-exercise-rafiki.png')
             )
         );
 
-        $html = view('pdf.meal-plan.meal-plan', compact('mealPlan', 'image'))->render();
+        $logoBase64 = null;
+        if ($company?->logo) {
+            $logoPath = Storage::disk('public')->path($company->logo);
+            if (file_exists($logoPath)) {
+                $logoBase64 = base64_encode(file_get_contents($logoPath));
+            }
+        }
+
+        $html = view('pdf.meal-plan.meal-plan', compact('mealPlan', 'image', 'company', 'logoBase64'))->render();
 
         $directory = storage_path('app/public/meal-plans');
 

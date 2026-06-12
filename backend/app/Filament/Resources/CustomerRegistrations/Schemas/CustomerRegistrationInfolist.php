@@ -12,6 +12,7 @@ class CustomerRegistrationInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
                 Section::make('Dados do Registro')
                     ->columns(2)
@@ -27,6 +28,11 @@ class CustomerRegistrationInfolist
                         TextEntry::make('message')
                             ->label('Mensagem')
                             ->columnSpanFull(),
+                    ]),
+
+                Section::make('Auditoria')
+                    ->columns(2)
+                    ->schema([
                         TextEntry::make('created_at')
                             ->label('Criado em')
                             ->dateTime()

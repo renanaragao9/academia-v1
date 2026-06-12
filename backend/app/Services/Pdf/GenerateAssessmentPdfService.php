@@ -3,7 +3,9 @@
 namespace App\Services\Pdf;
 
 use App\Models\Assessment;
+use App\Models\Configuration;
 use App\Models\Student;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 
 class GenerateAssessmentPdfService
@@ -11,6 +13,8 @@ class GenerateAssessmentPdfService
     public function run(int $studentId, ?string $dateFrom = null, ?string $dateTo = null): string
     {
         $student = Student::findOrFail($studentId);
+
+        $company = Configuration::where('is_active', true)->first();
 
         $query = Assessment::where('student_id', $studentId)
             ->with(['measurementType', 'user'])
@@ -34,7 +38,15 @@ class GenerateAssessmentPdfService
             )
         );
 
-        $html = view('pdf.assessment.assessment', compact('student', 'grouped', 'dateFrom', 'dateTo', 'image'))->render();
+        $logoBase64 = null;
+        if ($company?->logo) {
+            $logoPath = Storage::disk('public')->path($company->logo);
+            if (file_exists($logoPath)) {
+                $logoBase64 = base64_encode(file_get_contents($logoPath));
+            }
+        }
+
+        $html = view('pdf.assessment.assessment', compact('student', 'grouped', 'dateFrom', 'dateTo', 'image', 'company', 'logoBase64'))->render();
 
         $directory = storage_path('app/public/assessments');
 

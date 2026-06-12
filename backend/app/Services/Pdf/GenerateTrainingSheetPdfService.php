@@ -2,7 +2,9 @@
 
 namespace App\Services\Pdf;
 
+use App\Models\Configuration;
 use App\Models\TrainingSheet;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 
 class GenerateTrainingSheetPdfService
@@ -11,13 +13,23 @@ class GenerateTrainingSheetPdfService
     {
         $trainingSheet->loadMissing(['student', 'divisions.trainingDivision', 'divisions.exercises.exercise', 'creator']);
 
+        $company = Configuration::where('is_active', true)->first();
+
         $image = base64_encode(
             file_get_contents(
                 public_path('image/pdf/physical-therapy-exercise-rafiki.png')
             )
         );
 
-        $html = view('pdf.training-sheet.training-sheet', compact('trainingSheet', 'image'))->render();
+        $logoBase64 = null;
+        if ($company?->logo) {
+            $logoPath = Storage::disk('public')->path($company->logo);
+            if (file_exists($logoPath)) {
+                $logoBase64 = base64_encode(file_get_contents($logoPath));
+            }
+        }
+
+        $html = view('pdf.training-sheet.training-sheet', compact('trainingSheet', 'image', 'company', 'logoBase64'))->render();
 
         $directory = storage_path('app/public/training-sheets');
 

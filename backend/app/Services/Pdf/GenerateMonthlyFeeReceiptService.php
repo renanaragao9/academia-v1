@@ -2,7 +2,9 @@
 
 namespace App\Services\Pdf;
 
+use App\Models\Configuration;
 use App\Models\MonthlyFee;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 
 class GenerateMonthlyFeeReceiptService
@@ -11,13 +13,23 @@ class GenerateMonthlyFeeReceiptService
     {
         $fee->loadMissing(['student', 'planType', 'paymentType', 'user']);
 
+        $company = Configuration::where('is_active', true)->first();
+
         $image = base64_encode(
             file_get_contents(
                 public_path('image/pdf/payment-Information-cuate.png')
             )
         );
 
-        $html = view('pdf.monthly-fee.receipt', compact('fee', 'image'))->render();
+        $logoBase64 = null;
+        if ($company?->logo) {
+            $logoPath = Storage::disk('public')->path($company->logo);
+            if (file_exists($logoPath)) {
+                $logoBase64 = base64_encode(file_get_contents($logoPath));
+            }
+        }
+
+        $html = view('pdf.monthly-fee.receipt', compact('fee', 'image', 'company', 'logoBase64'))->render();
 
         $path = storage_path("app/public/monthly-fees/receipt-{$fee->uuid}.pdf");
 

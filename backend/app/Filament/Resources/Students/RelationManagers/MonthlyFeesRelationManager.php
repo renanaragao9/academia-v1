@@ -68,6 +68,10 @@ class MonthlyFeesRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
+                
                 Action::make('downloadPdf')
                     ->label('Recibo')
                     ->icon('heroicon-o-document-arrow-down')
@@ -77,9 +81,7 @@ class MonthlyFeesRelationManager extends RelationManager
 
                         return response()->download($path, "mensalidade-{$record->uuid}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+
             ]);
     }
 }

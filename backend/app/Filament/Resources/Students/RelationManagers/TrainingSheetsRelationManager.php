@@ -58,6 +58,10 @@ class TrainingSheetsRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
+
                 Action::make('downloadPdf')
                     ->label('Ficha PDF')
                     ->icon('heroicon-o-document-arrow-down')
@@ -67,9 +71,6 @@ class TrainingSheetsRelationManager extends RelationManager
 
                         return response()->download($path, "ficha-{$record->id}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
             ]);
     }
 }
