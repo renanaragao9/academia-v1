@@ -41,15 +41,23 @@ class BookingInfolist
                             ->placeholder('-'),
 
                         TextEntry::make('vacancies')
-                            ->label('Vagas'),
+                            ->label('Vagas')
+                            ->badge()
+                            ->color('gray'),
+
+                        TextEntry::make('bookingStudents')
+                            ->label('Reservas')
+                            ->badge()
+                            ->color(fn (Booking $record): string => $record->bookingStudents()->count() >= $record->vacancies ? 'danger' : 'success')
+                            ->state(fn (Booking $record): int => $record->bookingStudents()->count()),
+
+                        TextEntry::make('full_addresses')
+                            ->label('Endereço Completo')
+                            ->placeholder('-'),
 
                         TextEntry::make('user.name')
                             ->label('Registrado por')
                             ->placeholder('-'),
-
-                        TextEntry::make('full_addresses')
-                            ->label('Endereço Completo')
-                            ->columnSpanFull(),
 
                         TextEntry::make('start_date')
                             ->label('Data e Hora de Início')

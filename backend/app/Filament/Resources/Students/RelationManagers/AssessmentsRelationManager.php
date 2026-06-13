@@ -71,9 +71,10 @@ class AssessmentsRelationManager extends RelationManager
                 Action::make('downloadPdf')
                     ->label('Avaliação PDF')
                     ->icon('heroicon-o-document-arrow-down')
+                    ->color('danger')
                     ->action(function (Assessment $record) {
                         $service = app(GenerateAssessmentPdfService::class);
-                        $path = $service->run($record->student_id);
+                        $path = $service->run($record->student_id, assessment: $record);
 
                         $slug = str($record->student->name)->slug()->value();
 

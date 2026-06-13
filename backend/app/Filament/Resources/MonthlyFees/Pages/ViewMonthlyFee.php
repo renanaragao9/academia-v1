@@ -26,6 +26,7 @@ class ViewMonthlyFee extends ViewRecord
 
             Action::make('downloadPdf')
                 ->label('Recibo')
+                ->color('danger')
                 ->icon('heroicon-o-document-arrow-down')
                 ->action(function () {
                     $service = app(GenerateMonthlyFeeReceiptService::class);

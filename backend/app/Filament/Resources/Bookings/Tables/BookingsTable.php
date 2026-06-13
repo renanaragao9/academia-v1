@@ -3,15 +3,19 @@
 namespace App\Filament\Resources\Bookings\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class BookingsTable
 {
@@ -19,6 +23,11 @@ class BookingsTable
     {
         return $table
             ->columns([
+                TextColumn::make('bookingType.name')
+                    ->label('Tipo de Evento')
+                    ->sortable()
+                    ->searchable(),
+
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
@@ -37,11 +46,6 @@ class BookingsTable
                         default => $state,
                     })
                     ->sortable(),
-
-                TextColumn::make('bookingType.name')
-                    ->label('Tipo de Evento')
-                    ->sortable()
-                    ->searchable(),
 
                 TextColumn::make('full_addresses')
                     ->label('Endereço')
@@ -97,12 +101,39 @@ class BookingsTable
                         'completed' => 'Concluído',
                     ]),
 
+                Filter::make('start_date')
+                    ->label('Início')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('De início'),
+                        DatePicker::make('until')
+                            ->label('Até início'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'], fn ($q, $date) => $q->whereDate('start_date', '>=', $date))
+                        ->when($data['until'], fn ($q, $date) => $q->whereDate('start_date', '<=', $date)),
+                    ),
+
+                Filter::make('end_date')
+                    ->label('Fim')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('De fim'),
+                        DatePicker::make('until')
+                            ->label('Até fim'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'], fn ($q, $date) => $q->whereDate('end_date', '>=', $date))
+                        ->when($data['until'], fn ($q, $date) => $q->whereDate('end_date', '<=', $date)),
+                    ),
+
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

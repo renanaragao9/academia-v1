@@ -2,6 +2,7 @@
 
 namespace App\Services\Pdf;
 
+use App\Models\Assessment;
 use App\Models\AssessmentItem;
 use App\Models\Configuration;
 use App\Models\Student;
@@ -10,7 +11,7 @@ use Spatie\Browsershot\Browsershot;
 
 class GenerateAssessmentPdfService
 {
-    public function run(int $studentId, ?string $dateFrom = null, ?string $dateTo = null): string
+    public function run(int $studentId, ?string $dateFrom = null, ?string $dateTo = null, ?Assessment $assessment = null): string
     {
         $student = Student::findOrFail($studentId);
 
@@ -19,6 +20,10 @@ class GenerateAssessmentPdfService
         $query = AssessmentItem::whereHas('assessment', fn ($q) => $q->where('student_id', $studentId))
             ->with(['measurementType', 'user', 'assessment'])
             ->orderByDesc('assessed_at');
+
+        if ($assessment) {
+            $query->where('assessment_id', $assessment->id);
+        }
 
         if ($dateFrom) {
             $query->whereDate('assessed_at', '>=', $dateFrom);
@@ -46,7 +51,7 @@ class GenerateAssessmentPdfService
             }
         }
 
-        $html = view('pdf.assessment.assessment', compact('student', 'grouped', 'dateFrom', 'dateTo', 'image', 'company', 'logoBase64'))->render();
+        $html = view('pdf.assessment.assessment', compact('student', 'grouped', 'dateFrom', 'dateTo', 'image', 'company', 'logoBase64', 'assessment'))->render();
 
         $directory = storage_path('app/public/assessments');
 

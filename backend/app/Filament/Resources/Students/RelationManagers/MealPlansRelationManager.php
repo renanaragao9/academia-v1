@@ -66,6 +66,7 @@ class MealPlansRelationManager extends RelationManager
                 Action::make('downloadPdf')
                     ->label('Plano Alimentar PDF')
                     ->icon('heroicon-o-document-arrow-down')
+                    ->color('danger')
                     ->action(function (MealPlan $record) {
                         $service = app(GenerateMealPlanPdfService::class);
                         $path = $service->run($record);

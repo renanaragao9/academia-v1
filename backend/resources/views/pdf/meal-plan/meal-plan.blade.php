@@ -37,29 +37,29 @@
         <div class="relative bg-linear-to-r from-brand-500 to-brand-700 px-6 pt-5 pb-4 overflow-hidden">
             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, white 0%, transparent 50%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%);"></div>
 
-            <div class="flex items-center justify-between relative z-10">
-                <div class="flex items-center gap-3">
+            <div class="relative z-10 pt-4">
+                <div class="absolute left-0 bottom-0">
                     <img
                         src="data:image/png;base64,{{ $image }}"
                         alt="Plano Alimentar"
-                        style="width: 75px;"
+                        style="width: 100px;"
                         class="rounded-lg"
                     >
-                    <div>
-                        <h1 class="text-2xl font-bold text-black tracking-tight leading-tight">
-                            {{ $company->name ?? config('app.name') }}
-                        </h1>
-                        <p class="text-white/80 text-xs mt-0.5 tracking-wide font-medium">
-                            Plano Alimentar &mdash; {{ $mealPlan->name }}
-                        </p>
-                    </div>
                 </div>
-                <div class="text-right">
+                <div class="absolute right-0 bottom-0 text-right">
                     <p class="text-black/60 text-xs uppercase tracking-[0.2em] font-semibold">
                         Plano
                     </p>
-                    <p class="text-white font-mono text-sm font-bold mt-1">
+                    <p class="text-white font-mono text-sm font-bold mt-0.5">
                         #{{ $mealPlan->id }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <h1 class="text-2xl font-bold text-black tracking-tight leading-tight">
+                        {{ $company->name ?? config('app.name') }}
+                    </h1>
+                    <p class="text-white/80 text-xs mt-0.5 tracking-wide font-medium">
+                        Plano Alimentar &mdash; {{ $mealPlan->name }}
                     </p>
                 </div>
             </div>
@@ -73,8 +73,16 @@
                         <p class="font-bold text-zinc-900 text-sm">{{ $mealPlan->student->name }}</p>
                     </div>
                     <div class="text-right">
+                        <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Código</span>
+                        <p class="font-mono font-bold text-zinc-800 text-sm">{{ $mealPlan->student->code }}</p>
+                    </div>
+                    <div>
+                        <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Plano</span>
+                        <p class="font-bold text-zinc-900 text-sm">{{ $mealPlan->name }}</p>
+                    </div>
+                    <div class="text-right">
                         <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Período</span>
-                        <p class="font-semibold text-zinc-800 text-sm">
+                        <p class="font-mono font-bold text-zinc-800 text-sm">
                             {{ $mealPlan->start_date?->format('d/m/Y') ?? '—' }} a {{ $mealPlan->end_date?->format('d/m/Y') ?? '—' }}
                         </p>
                     </div>

@@ -64,6 +64,7 @@ class TrainingSheetsRelationManager extends RelationManager
 
                 Action::make('downloadPdf')
                     ->label('Ficha PDF')
+                    ->color('danger')
                     ->icon('heroicon-o-document-arrow-down')
                     ->action(function (TrainingSheet $record) {
                         $service = app(GenerateTrainingSheetPdfService::class);

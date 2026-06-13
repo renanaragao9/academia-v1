@@ -74,6 +74,7 @@ class MonthlyFeesRelationManager extends RelationManager
                 
                 Action::make('downloadPdf')
                     ->label('Recibo')
+                    ->color('danger')
                     ->icon('heroicon-o-document-arrow-down')
                     ->action(function (MonthlyFee $record) {
                         $service = app(GenerateMonthlyFeeReceiptService::class);

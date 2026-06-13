@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliações Físicas - {{ config('app.name') }}</title>
+    <title>Avaliação Física - {{ config('app.name') }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,22 +37,32 @@
         <div class="relative bg-linear-to-r from-brand-500 to-brand-700 px-6 pt-5 pb-4 overflow-hidden">
             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, white 0%, transparent 50%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%);"></div>
 
-            <div class="flex items-center justify-between relative z-10">
-                <div class="flex items-center gap-3">
+            <div class="relative z-10 pt-4">
+                <div class="absolute left-0 bottom-0">
                     <img
                         src="data:image/png;base64,{{ $image }}"
-                        alt="Avaliações Físicas"
-                        style="width: 75px;"
+                        alt="Avaliação Física"
+                        style="width: 100px;"
                         class="rounded-lg"
                     >
-                    <div>
-                        <h1 class="text-2xl font-bold text-black tracking-tight leading-tight">
-                            {{ $company->name ?? config('app.name') }}
-                        </h1>
-                        <p class="text-white/80 text-xs mt-0.5 tracking-wide font-medium">
-                            Avaliações Físicas
-                        </p>
-                    </div>
+                </div>
+                <div class="absolute right-0 bottom-0 text-right">
+                    <p class="text-black/60 text-xs uppercase tracking-[0.2em] font-semibold">
+                        Avaliação
+                    </p>
+                    @if ($assessment)
+                    <p class="text-white font-mono text-sm font-bold mt-0.5">
+                        #{{ $assessment->id }}
+                    </p>
+                    @endif
+                </div>
+                <div class="text-center">
+                    <h1 class="text-2xl font-bold text-black tracking-tight leading-tight">
+                        {{ $company->name ?? config('app.name') }}
+                    </h1>
+                    <p class="text-white/80 text-xs mt-0.5 tracking-wide font-medium">
+                        Avaliação Física
+                    </p>
                 </div>
             </div>
         </div>
@@ -68,6 +78,24 @@
                         <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Código</span>
                         <p class="font-mono font-bold text-zinc-800 text-sm">{{ $student->code }}</p>
                     </div>
+                    @if ($assessment)
+                    <div>
+                        <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Avaliação</span>
+                        <p class="font-bold text-zinc-900 text-sm">{{ $assessment->name }}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Período</span>
+                        <p class="font-mono font-bold text-zinc-800 text-sm">
+                            {{ $assessment->start_date?->format('d/m/Y') ?? '—' }} a {{ $assessment->end_date?->format('d/m/Y') ?? '—' }}
+                        </p>
+                    </div>
+                    @if ($assessment->observations)
+                    <div class="col-span-2">
+                        <span class="text-[9px] font-semibold text-zinc-400 uppercase tracking-wider">Observações</span>
+                        <p class="text-zinc-700 text-xs">{{ $assessment->observations }}</p>
+                    </div>
+                    @endif
+                    @endif
                 </div>
             </div>
 

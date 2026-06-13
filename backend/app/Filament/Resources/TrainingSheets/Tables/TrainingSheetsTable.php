@@ -13,8 +13,11 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TrainingSheetsTable
 {
@@ -25,6 +28,10 @@ class TrainingSheetsTable
                 TextColumn::make('name')
                     ->label('Ficha')
                     ->searchable(),
+                TextColumn::make('student.name')
+                    ->label('Aluno')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('start_date')
                     ->label('Início')
                     ->date('d/m/Y')
@@ -38,10 +45,6 @@ class TrainingSheetsTable
                 IconColumn::make('is_active')
                     ->label('Ativa')
                     ->boolean(),
-                TextColumn::make('student.name')
-                    ->label('Aluno')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('creator.name')
                     ->label('Criado por')
                     ->placeholder('-')
@@ -67,12 +70,23 @@ class TrainingSheetsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('student_id')
+                    ->label('Aluno')
+                    ->relationship('student', 'name')
+                    ->searchable()
+                    ->preload(),
+                Filter::make('is_active')
+                    ->label('Ativa')
+                    ->query(fn (Builder $query) => $query->where('is_active', true)),
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
                 Action::make('downloadPdf')
                     ->label('Ficha PDF')
+                    ->color('danger')
                     ->icon('heroicon-o-document-arrow-down')
                     ->action(function (TrainingSheet $record) {
                         $service = app(GenerateTrainingSheetPdfService::class);
@@ -80,8 +94,6 @@ class TrainingSheetsTable
 
                         return response()->download($path, "ficha-{$record->id}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

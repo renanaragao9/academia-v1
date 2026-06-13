@@ -37,29 +37,29 @@
         <div class="relative bg-linear-to-r from-brand-500 to-brand-700 px-8 pt-8 pb-6 overflow-hidden">
             <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, white 0%, transparent 50%), radial-gradient(circle at 80% 20%, white 0%, transparent 50%);"></div>
 
-            <div class="flex items-end justify-between relative z-10">
-                <div class="flex items-center gap-4">
+            <div class="relative z-10 pt-4">
+                <div class="absolute left-0 bottom-0">
                     <img
                         src="data:image/png;base64,{{ $image }}"
                         alt="Ficha de Treino"
                         style="width: 110px;"
                         class="rounded-lg"
                     >
-                    <div>
-                        <h1 class="text-3xl font-bold text-black tracking-tight leading-tight">
-                            {{ $company->name ?? config('app.name') }}
-                        </h1>
-                        <p class="text-white/80 text-sm mt-0.5 tracking-wide font-medium">
-                            Ficha de Treino &mdash; {{ $trainingSheet->name }}
-                        </p>
-                    </div>
                 </div>
-                <div class="text-right">
+                <div class="absolute right-0 bottom-0 text-right">
                     <p class="text-black/60 text-xs uppercase tracking-[0.2em] font-semibold">
                         Ficha
                     </p>
-                    <p class="text-white font-mono text-sm font-bold mt-1">
+                    <p class="text-white font-mono text-sm font-bold mt-0.5">
                         #{{ $trainingSheet->id }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <h1 class="text-3xl font-bold text-black tracking-tight leading-tight">
+                        {{ $company->name ?? config('app.name') }}
+                    </h1>
+                    <p class="text-white/80 text-sm mt-0.5 tracking-wide font-medium">
+                        Ficha de Treino &mdash; {{ $trainingSheet->name }}
                     </p>
                 </div>
             </div>

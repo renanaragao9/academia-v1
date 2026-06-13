@@ -50,8 +50,7 @@ class AssessmentsTable
 
                 TextColumn::make('items_total')
                     ->label('Medições')
-                    ->state(fn (Assessment $record): int => $record->items()->count())
-                    ->sortable(),
+                    ->state(fn (Assessment $record): int => $record->items()->count()),
 
                 TextColumn::make('creator.name')
                     ->label('Criado por')
@@ -70,19 +69,20 @@ class AssessmentsTable
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
                 Action::make('downloadPdf')
                     ->label('Avaliação PDF')
+                    ->color('danger')
                     ->icon('heroicon-o-document-arrow-down')
                     ->action(function (Assessment $record) {
                         $service = app(GenerateAssessmentPdfService::class);
-                        $path = $service->run($record->student_id);
+                        $path = $service->run($record->student_id, assessment: $record);
 
                         $slug = str($record->student->name)->slug()->value();
 
                         return response()->download($path, "avaliacoes-{$slug}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

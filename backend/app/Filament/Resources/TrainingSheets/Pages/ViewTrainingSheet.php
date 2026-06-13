@@ -4,10 +4,10 @@ namespace App\Filament\Resources\TrainingSheets\Pages;
 
 use App\Filament\Resources\Students\StudentResource;
 use App\Filament\Resources\TrainingSheets\TrainingSheetResource;
+use App\Services\Pdf\GenerateTrainingSheetPdfService;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Contracts\View\View;
 
 class ViewTrainingSheet extends ViewRecord
 {
@@ -23,12 +23,18 @@ class ViewTrainingSheet extends ViewRecord
                 ->url(fn () => StudentResource::getUrl('view', [
                     'record' => $this->record->student,
                 ])),
+            Action::make('downloadPdf')
+                ->label('Ficha PDF')
+                ->color('danger')
+                ->icon('heroicon-o-document-arrow-down')
+                ->action(function () {
+                    $service = app(GenerateTrainingSheetPdfService::class);
+                    $path = $service->run($this->record);
+
+                    return response()->download($path, "ficha-{$this->record->id}.pdf")->deleteFileAfterSend();
+                }),
             EditAction::make(),
         ];
     }
 
-    public function getFooter(): ?View
-    {
-        return view('filament.training-sheet.floating-nav');
-    }
 }
