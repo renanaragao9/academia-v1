@@ -6,13 +6,13 @@ use App\Models\Sale;
 use App\Services\Pdf\GenerateSaleReceiptPdfService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -51,12 +51,6 @@ class SalesTable
                         'canceled' => 'danger',
                         default => 'gray',
                     })
-                    ->sortable(),
-
-                TextColumn::make('saleItems_count')
-                    ->label('Produtos')
-                    ->counts('saleItems')
-                    ->badge()
                     ->sortable(),
 
                 TextColumn::make('amount_price')
@@ -99,29 +93,46 @@ class SalesTable
 
                 SelectFilter::make('user')
                     ->label('Vendedor')
-                    ->relationship('user', 'name')
+                    ->relationship('user', 'name', fn ($query) => $query->whereHas('role', fn ($q) => $q->where('name', '!=', 'Estudante')))
                     ->searchable()
                     ->preload(),
 
-                Filter::make('has_discount')
-                    ->label('Com desconto')
-                    ->query(fn (Builder $query) => $query->where('discount_amount', '>', 0)),
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'paid' => 'Pago',
+                        'open' => 'Aberto',
+                        'canceled' => 'Cancelado',
+                    ]),
+
+                SelectFilter::make('has_discount')
+                    ->label('Desconto')
+                    ->options([
+                        'with_discount' => 'Com desconto',
+                        'without_discount' => 'Sem desconto',
+                    ])
+                    ->query(fn ($query, array $data) => $query
+                        ->when($data['value'] === 'with_discount', fn ($q) => $q->where('discount_amount', '>', 0))
+                        ->when($data['value'] === 'without_discount', fn ($q) => $q->where('discount_amount', '=', 0)),
+                    ),
 
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
                 Action::make('downloadPdf')
                     ->label('Recibo')
                     ->icon('heroicon-o-document-arrow-down')
+                    ->color('danger')
                     ->action(function (Sale $record) {
                         $service = app(GenerateSaleReceiptPdfService::class);
                         $path = $service->run($record);
 
                         return response()->download($path, "recibo-{$record->uuid}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

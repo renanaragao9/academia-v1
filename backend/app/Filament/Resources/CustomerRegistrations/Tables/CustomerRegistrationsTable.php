@@ -12,6 +12,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,6 +52,11 @@ class CustomerRegistrationsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('plan_type_id')
+                    ->label('Plano')
+                    ->relationship('planType', 'name')
+                    ->searchable(),
+
                 Filter::make('created_at')
                     ->label('Período')
                     ->form([

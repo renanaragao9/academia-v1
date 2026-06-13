@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Sales\Pages;
 
 use App\Filament\Resources\Sales\SaleResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -14,6 +15,7 @@ class ViewSale extends ViewRecord
     {
         return [
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }
