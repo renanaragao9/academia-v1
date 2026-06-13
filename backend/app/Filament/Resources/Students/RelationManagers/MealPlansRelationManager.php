@@ -62,6 +62,7 @@ class MealPlansRelationManager extends RelationManager
                     ])),
             ])
             ->recordActions([
+                ViewAction::make(),
                 Action::make('downloadPdf')
                     ->label('Plano Alimentar PDF')
                     ->icon('heroicon-o-document-arrow-down')
@@ -71,7 +72,6 @@ class MealPlansRelationManager extends RelationManager
 
                         return response()->download($path, "plano-alimentar-{$record->id}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ]);
