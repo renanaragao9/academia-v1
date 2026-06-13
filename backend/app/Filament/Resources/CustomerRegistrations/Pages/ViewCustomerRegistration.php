@@ -9,6 +9,8 @@ use Filament\Resources\Pages\ViewRecord;
 
 class ViewCustomerRegistration extends ViewRecord
 {
+    protected static ?string $title = 'Visualizar Pré Cadastro de Cliente';
+
     protected static string $resource = CustomerRegistrationResource::class;
 
     protected function getHeaderActions(): array

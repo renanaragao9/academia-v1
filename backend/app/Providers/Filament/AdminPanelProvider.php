@@ -45,11 +45,13 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                'App\\Filament\\Widgets\\ReportsOverview',
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                'App\\Filament\\Widgets\\PeopleStatsOverview',
+                'App\\Filament\\Widgets\\TrainingStatsOverview',
+                'App\\Filament\\Widgets\\FinancialStatsOverview',
+                'App\\Filament\\Widgets\\RevenueExpensesChart',
+                'App\\Filament\\Widgets\\MonthlyWorkoutsChart',
             ])
             ->middleware([
                 EncryptCookies::class,

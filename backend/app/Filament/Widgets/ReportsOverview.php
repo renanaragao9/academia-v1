@@ -49,8 +49,8 @@ class ReportsOverview extends StatsOverviewWidget
         $monthBalance = $monthRevenue - $expensesMonthTotal;
 
         return [
-            Stat::make('Usuarios', Number::format($usersCount, locale: 'pt_BR'))
-                ->description('Total de usuarios cadastrados')
+            Stat::make('Usuários', Number::format($usersCount, locale: 'pt_BR'))
+                ->description('Total de usuários cadastrados')
                 ->descriptionIcon('heroicon-m-users')
                 ->color('primary'),
 
@@ -69,13 +69,13 @@ class ReportsOverview extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-m-bolt')
                 ->color('success'),
 
-            Stat::make('Avaliacoes', Number::format($assessmentsCount, locale: 'pt_BR'))
-                ->description('Total de avaliacoes fisicas')
+            Stat::make('Avaliações', Number::format($assessmentsCount, locale: 'pt_BR'))
+                ->description('Total de avaliações físicas')
                 ->descriptionIcon('heroicon-m-clipboard-document-check')
                 ->color('warning'),
 
             Stat::make('Treinos', Number::format($workoutLogsCount, locale: 'pt_BR'))
-                ->description('Total de logs de treino')
+                ->description('Total de treinos realizados')
                 ->descriptionIcon('heroicon-m-fire')
                 ->color('primary'),
 
@@ -104,18 +104,18 @@ class ReportsOverview extends StatsOverviewWidget
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger'),
 
-            Stat::make('Receita do Mes', Number::currency($monthRevenue, 'BRL', 'pt_BR'))
-                ->description('Compras + mensalidades no mes atual')
+            Stat::make('Receita do Mês', Number::currency($monthRevenue, 'BRL', 'pt_BR'))
+                ->description('Compras + mensalidades no mês atual')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success'),
 
-            Stat::make('Despesas do Mes', Number::currency($expensesMonthTotal, 'BRL', 'pt_BR'))
-                ->description('Despesas vencendo no mes atual')
+            Stat::make('Despesas do Mês', Number::currency($expensesMonthTotal, 'BRL', 'pt_BR'))
+                ->description('Despesas vencendo no mês atual')
                 ->descriptionIcon('heroicon-m-credit-card')
                 ->color('danger'),
 
-            Stat::make('Saldo do Mes', Number::currency($monthBalance, 'BRL', 'pt_BR'))
-                ->description('Receita do mes menos despesas do mes')
+            Stat::make('Saldo do Mês', Number::currency($monthBalance, 'BRL', 'pt_BR'))
+                ->description('Receita do mês menos despesas do mês')
                 ->descriptionIcon('heroicon-m-scale')
                 ->color($monthBalance >= 0 ? 'success' : 'danger'),
         ];

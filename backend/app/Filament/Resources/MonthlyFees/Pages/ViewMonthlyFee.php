@@ -6,7 +6,6 @@ use App\Filament\Resources\MonthlyFees\MonthlyFeeResource;
 use App\Filament\Resources\Students\StudentResource;
 use App\Services\Pdf\GenerateMonthlyFeeReceiptService;
 use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -35,9 +34,8 @@ class ViewMonthlyFee extends ViewRecord
 
                     return response()->download($path, "mensalidade-{$this->record->uuid}.pdf")->deleteFileAfterSend();
                 }),
-                
+
             EditAction::make(),
-            DeleteAction::make(),
         ];
     }
 }
