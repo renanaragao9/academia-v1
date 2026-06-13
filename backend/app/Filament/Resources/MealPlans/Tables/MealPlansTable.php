@@ -6,6 +6,7 @@ use App\Models\MealPlan;
 use App\Services\Pdf\GenerateMealPlanPdfService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -13,6 +14,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -56,21 +58,28 @@ class MealPlansTable
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
+                SelectFilter::make('student_id')
+                    ->label('Aluno')
+                    ->relationship('student', 'name')
+                    ->searchable(),
+
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
                 Action::make('downloadPdf')
                     ->label('Plano Alimentar PDF')
                     ->icon('heroicon-o-document-arrow-down')
+                    ->color('danger')
                     ->action(function (MealPlan $record) {
                         $service = app(GenerateMealPlanPdfService::class);
                         $path = $service->run($record);
 
                         return response()->download($path, "plano-alimentar-{$record->id}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

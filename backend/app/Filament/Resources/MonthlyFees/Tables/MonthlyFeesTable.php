@@ -6,12 +6,14 @@ use App\Models\MonthlyFee;
 use App\Services\Pdf\GenerateMonthlyFeeReceiptService;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
@@ -82,21 +84,38 @@ class MonthlyFeesTable
             ])
             ->defaultSort('start_date', 'desc')
             ->filters([
+                SelectFilter::make('student_id')
+                    ->label('Aluno')
+                    ->relationship('student', 'name')
+                    ->searchable(),
+
+                SelectFilter::make('plan_type_id')
+                    ->label('Plano')
+                    ->relationship('planType', 'name')
+                    ->searchable(),
+
+                SelectFilter::make('payment_type_id')
+                    ->label('Forma de Pagamento')
+                    ->relationship('paymentType', 'name')
+                    ->searchable(),
+
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
                 Action::make('downloadPdf')
                     ->label('Recibo')
                     ->icon('heroicon-o-document-arrow-down')
+                    ->color('danger')
                     ->action(function (MonthlyFee $record) {
                         $service = app(GenerateMonthlyFeeReceiptService::class);
                         $path = $service->run($record);
 
                         return response()->download($path, "mensalidade-{$record->uuid}.pdf")->deleteFileAfterSend();
                     }),
-                ViewAction::make(),
-                EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
