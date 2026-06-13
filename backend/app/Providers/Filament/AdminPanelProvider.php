@@ -45,6 +45,8 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->widgets([
                 AccountWidget::class,
                 'App\\Filament\\Widgets\\PeopleStatsOverview',
