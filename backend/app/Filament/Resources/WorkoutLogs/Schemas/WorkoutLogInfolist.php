@@ -15,6 +15,7 @@ class WorkoutLogInfolist
             ->components([
                 Section::make('Dados do Treino')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->schema([
                         TextEntry::make('student.name')
                             ->label('Aluno')
@@ -48,6 +49,7 @@ class WorkoutLogInfolist
 
                 Section::make('Auditoria')
                     ->columns(2)
+                    ->columnSpanFull()
                     ->schema([
                         TextEntry::make('created_at')
                             ->label('Criado em')

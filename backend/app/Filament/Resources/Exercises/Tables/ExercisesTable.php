@@ -3,12 +3,12 @@
 namespace App\Filament\Resources\Exercises\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -42,9 +42,11 @@ class ExercisesTable
                     ->searchable()
                     ->sortable(),
 
-                IconColumn::make('is_active')
+                TextColumn::make('is_active')
                     ->label('Ativo')
-                    ->boolean()
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Sim' : 'Não')
                     ->sortable(),
 
                 TextColumn::make('created_at')
@@ -68,12 +70,20 @@ class ExercisesTable
                     ->label('Equipamento')
                     ->relationship('equipmentType', 'name'),
 
+                SelectFilter::make('is_active')
+                    ->label('Ativo')
+                    ->options([
+                        '1' => 'Sim',
+                        '0' => 'Não',
+                    ]),
+
                 TrashedFilter::make()
                     ->label('Registros excluídos'),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -3,14 +3,18 @@
 namespace App\Filament\Resources\CustomerRegistrations\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CustomerRegistrationsTable
 {
@@ -47,11 +51,25 @@ class CustomerRegistrationsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Filter::make('created_at')
+                    ->label('Período')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('De'),
+                        DatePicker::make('until')
+                            ->label('Até'),
+                    ])
+                    ->query(fn (Builder $query, array $data) => $query
+                        ->when($data['from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                        ->when($data['until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date)),
+                    ),
+
                 TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

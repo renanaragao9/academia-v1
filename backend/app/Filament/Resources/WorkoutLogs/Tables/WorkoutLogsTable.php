@@ -3,10 +3,12 @@
 namespace App\Filament\Resources\WorkoutLogs\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class WorkoutLogsTable
@@ -58,11 +60,19 @@ class WorkoutLogsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('student_id')
+                    ->label('Aluno')
+                    ->relationship('student', 'name')
+                    ->searchable(),
+                SelectFilter::make('training_sheet_id')
+                    ->label('Ficha')
+                    ->relationship('trainingSheet', 'name')
+                    ->searchable(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

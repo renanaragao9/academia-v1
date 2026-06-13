@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Exercises\Pages;
 
 use App\Filament\Resources\Exercises\ExerciseResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -14,6 +15,7 @@ class ViewExercise extends ViewRecord
     {
         return [
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

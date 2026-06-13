@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CustomerRegistrations\Pages;
 
 use App\Filament\Resources\CustomerRegistrations\CustomerRegistrationResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -14,6 +15,7 @@ class ViewCustomerRegistration extends ViewRecord
     {
         return [
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

@@ -28,8 +28,14 @@ class ItemFieldTypesRelationManager extends RelationManager
                     ->relationship(
                         name: 'fieldType',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query) => $query
-                            ->whereNotIn('id', $this->getOwnerRecord()->itemFieldTypes()->pluck('field_type_id')),
+                        modifyQueryUsing: function (Builder $query, ?\Filament\Schemas\Components\Component $component = null) {
+                            $record = $component?->getRecord();
+                            $excludeIds = $this->getOwnerRecord()->itemFieldTypes()
+                                ->when($record, fn ($q) => $q->where('id', '!=', $record->id))
+                                ->pluck('field_type_id');
+
+                            return $query->whereNotIn('id', $excludeIds);
+                        },
                     )
                     ->searchable()
                     ->preload()
@@ -62,7 +68,8 @@ class ItemFieldTypesRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->modalHeading('Editar Campo'),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

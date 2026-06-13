@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Foods\Pages;
 
 use App\Filament\Resources\Foods\FoodResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -14,6 +15,7 @@ class ViewFood extends ViewRecord
     {
         return [
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

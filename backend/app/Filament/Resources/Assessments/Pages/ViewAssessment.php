@@ -7,6 +7,7 @@ use App\Filament\Resources\Students\StudentResource;
 use App\Models\Assessment;
 use App\Services\Pdf\GenerateAssessmentPdfService;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -44,6 +45,7 @@ class ViewAssessment extends ViewRecord
                 }),
 
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

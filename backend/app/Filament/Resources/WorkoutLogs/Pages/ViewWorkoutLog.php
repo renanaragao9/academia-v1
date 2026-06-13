@@ -6,6 +6,7 @@ use App\Filament\Resources\Students\StudentResource;
 use App\Filament\Resources\WorkoutLogs\Schemas\WorkoutLogInfolist;
 use App\Filament\Resources\WorkoutLogs\WorkoutLogResource;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Schema;
@@ -35,6 +36,7 @@ class ViewWorkoutLog extends ViewRecord
                     'record' => $this->record->student,
                 ])),
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }
